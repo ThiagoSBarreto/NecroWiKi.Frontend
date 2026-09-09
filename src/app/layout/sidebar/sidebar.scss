@@ -1,0 +1,81 @@
+:host {
+    display: block;
+}
+
+.necro-sidebar {
+    width: 235px;
+
+    flex-shrink: 0;
+
+    padding: 10px;
+
+    background: var(--necro-surface);
+
+    border-right: 1px solid var(--necro-border);
+
+    overflow-y: auto;
+}
+
+.sidebar-section {
+    margin-bottom: 14px;
+}
+
+.sidebar-title {
+    padding: 8px 10px;
+
+    color: var(--necro-primary);
+
+    font-size: 14px;
+    font-weight: bold;
+
+    border-bottom: 1px solid var(--necro-border);
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar-title.wow {
+    color: var(--necro-wow);
+}
+
+.sidebar-title.ragnarok {
+    color: var(--necro-ragnarok);
+}
+
+.sidebar-title.diablo {
+    color: var(--necro-diablo);
+}
+
+.sidebar-title.arcade {
+    color: var(--necro-arcade);
+}
+
+.necro-sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 7px 12px;
+
+    color: var(--necro-text-muted);
+
+    text-decoration: none;
+
+    border-radius: 5px;
+
+    font-size: 13px;
+
+    transition:
+        background 0.15s,
+        color 0.15s;
+}
+
+.necro-sidebar a:hover {
+    background: var(--necro-surface-3);
+    color: var(--necro-primary);
+}
+
+.necro-sidebar a i {
+    width: 16px;
+}

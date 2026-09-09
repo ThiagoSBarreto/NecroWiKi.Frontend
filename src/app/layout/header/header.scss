@@ -1,0 +1,54 @@
+:host {
+    display: block;
+}
+
+.necro-header {
+    height: 58px;
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+
+    padding: 0 10px;
+
+    background: var(--necro-surface);
+
+    border-bottom: 1px solid var(--necro-border);
+
+    box-shadow:
+        0 0 10px rgba(0, 255, 157, 0.08);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 2px;
+}
+
+.header-title {
+    color: var(--necro-primary);
+
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 3px;
+
+    text-align: center;
+
+    text-shadow:
+        0 0 8px rgba(0, 255, 157, 0.25);
+}
+
+button {
+    color: var(--necro-text) !important;
+}
+
+button:hover {
+    color: var(--necro-primary) !important;
+}
