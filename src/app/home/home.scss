@@ -1,8 +1,6 @@
 .home {
     width: 100%;
-
     min-height: 100%;
-
     background: #050505;
 }
 
@@ -13,11 +11,9 @@
 
 .games-list {
     width: 100%;
-
     min-height: 100%;
 
     display: flex;
-
     flex-direction: column;
 
     gap: 6px;
@@ -51,36 +47,13 @@
 
     &:hover {
         width: 100%;
-
         filter: brightness(1.08);
     }
 }
 
 
 /* =========================================================
-   ÁREA PRINCIPAL
-   ========================================================= */
-
-.game-main {
-    position: absolute;
-
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    display: block;
-
-    color: inherit;
-
-    text-decoration: none;
-
-    z-index: 2;
-}
-
-
-/* =========================================================
-   CONTEÚDO ESTÁTICO
+   CONTEÚDO
    ========================================================= */
 
 .game-content {
@@ -197,8 +170,6 @@
     transition: opacity 0.25s ease;
 
     pointer-events: none;
-
-    z-index: 1;
 }
 
 .game-card:hover .game-expanded {
@@ -253,21 +224,21 @@
 .game-card.wow {
     background:
         linear-gradient(90deg,
-            #08192d 0%,
-            #0b1c31 45%,
-            #07111e 100%);
+            #2d1b08 0%,
+            #3a2108 45%,
+            #1b1005 100%);
 
-    border-left: 3px solid #3b82f6;
+    border-left: 3px solid #f59e0b;
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.03),
         inset 0 -1px 0 rgba(0, 0, 0, 0.5);
 
     .game-info h2 {
-        color: #60a5fa;
+        color: #fbbf24;
 
         text-shadow:
-            0 0 10px rgba(59, 130, 246, 0.25);
+            0 0 10px rgba(245, 158, 11, 0.3);
     }
 }
 
@@ -279,21 +250,21 @@
 .game-card.ragnarok {
     background:
         linear-gradient(90deg,
-            #240b24 0%,
-            #1d0a1d 45%,
-            #110811 100%);
+            #082438 0%,
+            #0b304b 45%,
+            #061721 100%);
 
-    border-left: 3px solid #ec4899;
+    border-left: 3px solid #38bdf8;
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.03),
         inset 0 -1px 0 rgba(0, 0, 0, 0.5);
 
     .game-info h2 {
-        color: #f472b6;
+        color: #7dd3fc;
 
         text-shadow:
-            0 0 10px rgba(236, 72, 153, 0.25);
+            0 0 10px rgba(56, 189, 248, 0.3);
     }
 }
 
@@ -418,7 +389,6 @@
 
     .game-content {
         left: 50%;
-
         width: 100%;
     }
 
