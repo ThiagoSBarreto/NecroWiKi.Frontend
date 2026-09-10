@@ -1,81 +1,170 @@
-:host {
-    display: block;
+.sidebar {
+    width: 100%;
+    min-height: 100%;
+
+    padding: 12px 10px;
+
+    background: #080808;
 }
 
-.necro-sidebar {
-    width: 235px;
 
-    flex-shrink: 0;
-
-    padding: 10px;
-
-    background: var(--necro-surface);
-
-    border-right: 1px solid var(--necro-border);
-
-    overflow-y: auto;
-}
+/* =========================================================
+   GRUPOS
+   ========================================================= */
 
 .sidebar-section {
-    margin-bottom: 14px;
+    margin-bottom: 18px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
 }
 
-.sidebar-title {
-    padding: 8px 10px;
 
-    color: var(--necro-primary);
+/* =========================================================
+   TÍTULO
+   ========================================================= */
 
-    font-size: 14px;
-    font-weight: bold;
-
-    border-bottom: 1px solid var(--necro-border);
-
+.sidebar-section h3 {
     display: flex;
+
     align-items: center;
+
     gap: 8px;
+
+    margin: 0 0 6px 4px;
+
+    font-size: 0.85rem;
+
+    font-weight: 700;
+
+    color: #a1a1aa;
+
+    letter-spacing: 0.03em;
 }
 
-.sidebar-title.wow {
-    color: var(--necro-wow);
+.sidebar-section h3 img {
+    width: 22px;
+    height: 22px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
 }
 
-.sidebar-title.ragnarok {
-    color: var(--necro-ragnarok);
+.sidebar-section h3 span {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
 }
 
-.sidebar-title.diablo {
-    color: var(--necro-diablo);
-}
 
-.sidebar-title.arcade {
-    color: var(--necro-arcade);
-}
+/* =========================================================
+   LINKS
+   ========================================================= */
 
-.necro-sidebar a {
+.sidebar-link {
+    width: 100%;
+
+    min-height: 34px;
+
     display: flex;
+
     align-items: center;
+
     gap: 9px;
 
-    padding: 7px 12px;
-
-    color: var(--necro-text-muted);
-
-    text-decoration: none;
+    padding: 6px 9px;
 
     border-radius: 5px;
 
-    font-size: 13px;
+    color: #d4d4d8;
+
+    text-decoration: none;
+
+    font-size: 0.85rem;
 
     transition:
-        background 0.15s,
-        color 0.15s;
+        background 0.15s ease,
+        color 0.15s ease,
+        padding-left 0.15s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.06);
+
+        color: #ffffff;
+
+        padding-left: 12px;
+    }
+
+    &.active {
+        background: rgba(255, 255, 255, 0.1);
+
+        color: #ffffff;
+    }
 }
 
-.necro-sidebar a:hover {
-    background: var(--necro-surface-3);
-    color: var(--necro-primary);
+
+/* =========================================================
+   ÍCONES DE IMAGEM
+   ========================================================= */
+
+.sidebar-link>img {
+    width: 20px;
+    height: 20px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
 }
 
-.necro-sidebar a i {
-    width: 16px;
+
+/* =========================================================
+   ÍCONES PRIME
+   ========================================================= */
+
+.sidebar-link>i {
+    width: 20px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 0.95rem;
+
+    flex-shrink: 0;
+
+    opacity: 0.85;
+}
+
+
+/* =========================================================
+   CORES DOS GRUPOS
+   ========================================================= */
+
+.sidebar-section.wow h3 {
+    color: #60a5fa;
+}
+
+.sidebar-section.ragnarok h3 {
+    color: #f472b6;
+}
+
+.sidebar-section.diablo h3 {
+    color: #f87171;
+}
+
+.sidebar-section.arcade h3 {
+    color: #22d3ee;
+}
+
+.sidebar-section.necroflix h3 {
+    color: #00a4dc;
+}
+
+.sidebar-section.necrohome h3 {
+    color: #c084fc;
 }

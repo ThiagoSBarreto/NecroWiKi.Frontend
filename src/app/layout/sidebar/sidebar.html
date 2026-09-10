@@ -1,96 +1,59 @@
-<aside class="necro-sidebar">
-    <div class="sidebar-section">
-        <div class="sidebar-title">
-            <i class="pi pi-home"></i>
-            Principal
-        </div>
+<aside class="sidebar">
 
-        <a routerLink="/home">
-            <i class="pi pi-home"></i>
-            Início
-        </a>
-    </div>
+    @for (game of wikiItems; track game.id) {
+    <section class="sidebar-section" [class]="game.theme">
+        <h3>
+            <img [src]="game.image" [alt]="game.title" />
+            <span>
+                {{ game.title }}
+            </span>
+        </h3>
 
-    <div class="sidebar-section">
-        <div class="sidebar-title wow">
-            <i class="pi pi-shield"></i>
-            World of Warcraft
-        </div>
 
-        <a routerLink="/wow">
-            <i class="pi pi-server"></i>
-            AzerothCore
-        </a>
+        @for (link of game.links; track link.route) {
 
-        <a routerLink="/wow/classes">
-            <i class="pi pi-users"></i>
-            Classes
-        </a>
+        @if (link.external) {
 
-        <a routerLink="/wow/items">
-            <i class="pi pi-box"></i>
-            Itens
-        </a>
-    </div>
+        <a class="sidebar-link" [href]="link.route" target="_blank" rel="noopener noreferrer">
+            @if (link.image) {
+            <img [src]="link.image" [alt]="link.label" />
+            }
 
-    <div class="sidebar-section">
-        <div class="sidebar-title ragnarok">
-            <i class="pi pi-bolt"></i>
-            Ragnarok
-        </div>
+            @if (link.icon) {
+            <i [class]="link.icon"></i>
+            }
 
-        <a routerLink="/ragnarok">
-            <i class="pi pi-server"></i>
-            rAthena
+            <span>
+                {{ link.label }}
+            </span>
+
         </a>
 
-        <a routerLink="/ragnarok/classes">
-            <i class="pi pi-users"></i>
-            Classes
+        } @else {
+
+        <a class="sidebar-link" [routerLink]="link.route" routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }">
+
+            @if (link.image) {
+            <img [src]="link.image" [alt]="link.label" />
+            }
+
+            @if (link.icon) {
+            <i [class]="link.icon"></i>
+            }
+
+            <span>
+                {{ link.label }}
+            </span>
+
         </a>
 
-        <a routerLink="/ragnarok/items">
-            <i class="pi pi-box"></i>
-            Itens
-        </a>
-    </div>
+        }
 
-    <div class="sidebar-section">
-        <div class="sidebar-title diablo">
-            <i class="pi pi-sun"></i>
-            Diablo II
-        </div>
+        }
 
-        <a routerLink="/diablo2">
-            <i class="pi pi-server"></i>
-            PvPGN
-        </a>
+    </section>
 
-        <a routerLink="/diablo2/characters">
-            <i class="pi pi-users"></i>
-            Personagens
-        </a>
+    }
 
-        <a routerLink="/diablo2/items">
-            <i class="pi pi-box"></i>
-            Itens
-        </a>
-    </div>
-
-    <div class="sidebar-section">
-        <div class="sidebar-title arcade">
-            <i class="pi pi-desktop"></i>
-            NecroArcade
-        </div>
-
-        <a routerLink="/arcade">
-            <i class="pi pi-th-large"></i>
-            Biblioteca
-        </a>
-
-        <a routerLink="/arcade/saves">
-            <i class="pi pi-save"></i>
-            Saves
-        </a>
-    </div>
 </aside>

@@ -1,1 +1,28 @@
-<app-shell />
+<div class="app-layout">
+
+    <!-- HEADER -->
+    <header class="app-header">
+        <app-header></app-header>
+    </header>
+
+    <!-- ÁREA CENTRAL -->
+    <div class="app-body">
+
+        <!-- SIDEBAR -->
+        <aside class="app-sidebar">
+            <app-sidebar></app-sidebar>
+        </aside>
+
+        <!-- CONTEÚDO -->
+        <main class="app-content">
+            <router-outlet></router-outlet>
+        </main>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+        <app-footer></app-footer>
+    </footer>
+
+</div>

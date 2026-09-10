@@ -1,0 +1,113 @@
+:host {
+    display: block;
+
+    width: 100%;
+    height: 100vh;
+
+    overflow: hidden;
+}
+
+
+.app-layout {
+    width: 100%;
+    height: 100vh;
+
+    display: grid;
+
+    grid-template-rows:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    overflow: hidden;
+
+    background: #050505;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.app-header {
+    width: 100%;
+
+    z-index: 100;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   ÁREA CENTRAL
+   ========================================================= */
+
+.app-body {
+    min-width: 0;
+    min-height: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        260px
+        minmax(0, 1fr);
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.app-sidebar {
+    min-width: 0;
+    min-height: 0;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+}
+
+
+/* =========================================================
+   CONTEÚDO
+   ========================================================= */
+
+.app-content {
+    min-width: 0;
+    min-height: 0;
+
+    /*
+     * ESTE é o scroll da Home.
+     */
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+}
+
+
+/*
+ * Importante:
+ * o router-outlet é um elemento inline por padrão.
+ * Não queremos que ele participe de uma altura estranha
+ * dentro do layout.
+ */
+.app-content > router-outlet {
+    display: none;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.app-footer {
+    width: 100%;
+
+    z-index: 100;
+
+    flex-shrink: 0;
+}

@@ -1,10 +1,16 @@
 import { Component } from '@angular/core';
-import { ShellComponent } from './layout/shell/shell';
+import { HeaderComponent } from './layout/header/header';
+import { FooterComponent } from './layout/footer/footer';
+import { SidebarComponent } from './layout/sidebar/sidebar';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
     selector: 'app-root',
     imports: [
-        ShellComponent
+        RouterOutlet,
+        HeaderComponent,
+        FooterComponent,
+        SidebarComponent
     ],
     templateUrl: './app.html',
     styleUrl: './app.scss'
