@@ -1,0 +1,9 @@
+services:
+  angular-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: necro-wiki-client
+    ports:
+      - "6019:80"
+    restart: always

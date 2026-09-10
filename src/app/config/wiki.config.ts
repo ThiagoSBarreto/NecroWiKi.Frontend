@@ -44,6 +44,20 @@ export const WIKI_CONFIG: WikiItem[] = [
                 image: '/images/necro_clock.png',
                 severity: 'info',
                 external: true
+            },
+            {
+                label: 'Prowlarr',
+                route: `http://${SERVER_IP}:6010`,
+                image: '/images/prowlarr.png',
+                severity: 'contrast',
+                external: true
+            },
+            {
+                label: 'qBittorrent',
+                route: `http://${SERVER_IP}:6006`,
+                image: '/images/qbittorrent.png',
+                severity: 'success',
+                external: true
             }
         ]
     },
@@ -89,20 +103,6 @@ export const WIKI_CONFIG: WikiItem[] = [
                 route: `http://${SERVER_IP}:6007`,
                 image: '/images/bazarr.png',
                 severity: 'secondary',
-                external: true
-            },
-            {
-                label: 'Prowlarr',
-                route: `http://${SERVER_IP}:6010`,
-                image: '/images/prowlarr.png',
-                severity: 'contrast',
-                external: true
-            },
-            {
-                label: 'qBittorrent',
-                route: `http://${SERVER_IP}:6006`,
-                image: '/images/qbittorrent.png',
-                severity: 'success',
                 external: true
             }
         ]
