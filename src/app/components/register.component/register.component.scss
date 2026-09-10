@@ -1,0 +1,400 @@
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.register-page {
+    position: relative;
+
+    width: 100%;
+    min-height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    color: var(--register-text);
+    background: #090909;
+}
+
+
+/* =========================================================
+   BACKGROUND
+   ========================================================= */
+
+.register-background {
+    position: absolute;
+
+    inset: 0;
+
+    background-image: var(--register-bg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    transform: scale(1.03);
+
+    filter: saturate(0.85);
+
+    z-index: 0;
+}
+
+.register-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(90deg,
+            rgba(0, 0, 0, 0.82) 0%,
+            rgba(0, 0, 0, 0.62) 45%,
+            rgba(0, 0, 0, 0.78) 100%);
+
+    z-index: 1;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.register-content {
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+
+    padding: 48px 24px;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.register-card {
+    width: 100%;
+    max-width: 470px;
+
+    padding: 38px;
+
+    background: var(--register-card);
+
+    border: 1px solid var(--register-border);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.65);
+
+    backdrop-filter: blur(8px);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.register-header {
+    text-align: center;
+
+    margin-bottom: 32px;
+}
+
+.register-category {
+    display: inline-block;
+
+    margin-bottom: 10px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.22em;
+
+    color: var(--register-accent);
+}
+
+.register-header h1 {
+    margin: 0;
+
+    font-size: 30px;
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    color: var(--register-text);
+}
+
+.register-header p {
+    margin: 10px 0 0;
+
+    font-size: 13px;
+    line-height: 1.5;
+
+    color: var(--register-muted);
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 19px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+
+    color: var(--register-text);
+}
+
+.form-group input {
+    width: 100%;
+
+    height: 46px;
+
+    padding: 0 14px;
+
+    border: 1px solid var(--register-border);
+    border-radius: 7px;
+
+    outline: none;
+
+    background: var(--register-input);
+
+    color: var(--register-text);
+
+    font-family: inherit;
+    font-size: 14px;
+
+    transition:
+        border-color 150ms ease,
+        box-shadow 150ms ease,
+        background 150ms ease;
+}
+
+.form-group input::placeholder {
+    color: var(--register-muted);
+    opacity: 0.65;
+}
+
+.form-group input:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.form-group input:focus {
+    border-color: var(--register-accent);
+
+    box-shadow:
+        0 0 0 2px color-mix(in srgb,
+            var(--register-accent) 18%,
+            transparent);
+
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.form-group input.invalid {
+    border-color: #b33a3a;
+}
+
+
+/* =========================================================
+   ERRORS
+   ========================================================= */
+
+.field-error {
+    font-size: 12px;
+
+    color: #ff8d8d;
+}
+
+
+/* =========================================================
+   INFORMATION
+   ========================================================= */
+
+.register-info {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 9px;
+
+    margin-top: 2px;
+    padding: 11px 12px;
+
+    border: 1px solid var(--register-border);
+    border-radius: 7px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    color: var(--register-muted);
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.info-icon {
+    flex: 0 0 auto;
+
+    width: 16px;
+    height: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--register-muted);
+    border-radius: 50%;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   BUTTON
+   ========================================================= */
+
+.register-button {
+    width: 100%;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 3px;
+
+    border: 0;
+    border-radius: 7px;
+
+    background: var(--register-accent);
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 150ms ease,
+        transform 150ms ease,
+        box-shadow 150ms ease;
+}
+
+.register-button:hover {
+    background: var(--register-accent-hover);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+.register-button:active {
+    transform: translateY(1px);
+}
+
+.button-arrow {
+    font-size: 17px;
+
+    transition:
+        transform 150ms ease;
+}
+
+.register-button:hover .button-arrow {
+    transform: translateX(3px);
+}
+
+:host ::ng-deep .register-back {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    z-index: 10;
+}
+
+:host ::ng-deep .register-back .p-button {
+    color: var(--register-text);
+}
+
+:host ::ng-deep .register-back .p-button:hover {
+    color: var(--register-text);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .register-content {
+        padding: 28px 16px;
+    }
+
+    .register-card {
+        padding: 28px 22px;
+
+        border-radius: 11px;
+    }
+
+    .register-header {
+        margin-bottom: 27px;
+    }
+
+    .register-header h1 {
+        font-size: 26px;
+    }
+
+    .register-header p {
+        font-size: 12px;
+    }
+
+    .register-form {
+        gap: 17px;
+    }
+
+    .form-group input {
+        height: 45px;
+    }
+}
+
+
+@media (max-height: 700px) {
+
+    .register-content {
+        padding-top: 24px;
+        padding-bottom: 24px;
+    }
+
+    .register-card {
+        padding-top: 26px;
+        padding-bottom: 26px;
+    }
+
+    .register-header {
+        margin-bottom: 22px;
+    }
+
+}

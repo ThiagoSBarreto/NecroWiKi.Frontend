@@ -23,6 +23,31 @@ export interface WikiItem {
 
 export const WIKI_CONFIG: WikiItem[] = [
     {
+        id: 'necrohome',
+        title: 'NecroHome',
+        subtitle: 'Projetos e utilidades',
+        image: '/images/necro_home.png',
+        theme: 'necrohome',
+        route: '/necrohome',
+
+        links: [
+            {
+                label: 'NecroFinances',
+                route: `http://${SERVER_IP}:6001`,
+                image: '/images/necro_finances.png',
+                severity: 'success',
+                external: true
+            },
+            {
+                label: 'NecroClock',
+                route: `http://${SERVER_IP}:6005`,
+                image: '/images/necro_clock.png',
+                severity: 'info',
+                external: true
+            }
+        ]
+    },
+    {
         id: 'necroflix',
         title: 'NecroFlix',
         subtitle: 'Jellyfin | Sonarr | Radarr | Lidarr',
@@ -82,7 +107,6 @@ export const WIKI_CONFIG: WikiItem[] = [
             }
         ]
     },
-
     {
         id: 'wow',
         title: 'NecroHome - WoW 3.3.5',
@@ -94,25 +118,24 @@ export const WIKI_CONFIG: WikiItem[] = [
         links: [
             {
                 label: 'Cadastrar',
-                route: '/wow/register',
+                route: '/register/wow',
                 icon: 'pi pi-user',
                 severity: 'warn'
             },
             {
                 label: 'Download',
-                route: '/wow/download',
+                route: '/download/wow',
                 icon: 'pi pi-download',
                 severity: 'warn'
             },
             {
                 label: 'Tutoriais',
-                route: '/wow/tutorials',
+                route: '/tutorials/wow',
                 icon: 'pi pi-book',
                 severity: 'warn'
             }
         ]
     },
-
     {
         id: 'ragnarok',
         title: 'NecRO - Ragnarok Online',
@@ -124,25 +147,24 @@ export const WIKI_CONFIG: WikiItem[] = [
         links: [
             {
                 label: 'Cadastrar',
-                route: '/ragnarok/register',
+                route: '/register/ragnarok',
                 icon: 'pi pi-user',
                 severity: 'info'
             },
             {
                 label: 'Download',
-                route: '/ragnarok/download',
+                route: '/download/ragnarok',
                 icon: 'pi pi-download',
                 severity: 'info'
             },
             {
                 label: 'Tutoriais',
-                route: '/ragnarok/tutorials',
+                route: '/tutorials/ragnarok',
                 icon: 'pi pi-book',
                 severity: 'info'
             }
         ]
     },
-
     {
         id: 'diablo2',
         title: 'NecroD2 - 1.14d',
@@ -166,7 +188,6 @@ export const WIKI_CONFIG: WikiItem[] = [
             }
         ]
     },
-
     {
         id: 'arcade',
         title: 'NecroArcade',
@@ -208,31 +229,4 @@ export const WIKI_CONFIG: WikiItem[] = [
             }
         ]
     },
-
-    {
-        id: 'necrohome',
-        title: 'NecroHome',
-        subtitle: 'Projetos e utilidades',
-        image: '/images/necro_home.png',
-        theme: 'necrohome',
-        route: '/necrohome',
-
-        links: [
-            {
-                label: 'NecroFinances',
-                route: `http://${SERVER_IP}:6001`,
-                image: '/images/necro_finances.png',
-                severity: 'success',
-                external: true
-            },
-            {
-                label: 'NecroClock',
-                route: `http://${SERVER_IP}:6005`,
-                image: '/images/necro_clock.png',
-                severity: 'info',
-                external: true
-            }
-        ]
-    }
-
 ];

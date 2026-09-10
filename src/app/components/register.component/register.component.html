@@ -1,0 +1,176 @@
+<div class="register-page" [style.--register-bg]="'url(' + config.backgroundImage + ')'"
+    [style.--register-accent]="config.theme.accent" [style.--register-accent-hover]="config.theme.accentHover"
+    [style.--register-text]="config.theme.text" [style.--register-muted]="config.theme.mutedText"
+    [style.--register-card]="config.theme.cardBackground" [style.--register-input]="config.theme.inputBackground"
+    [style.--register-border]="config.theme.border">
+
+    <p-button class="register-back" icon="pi pi-arrow-left" label="Voltar" severity="secondary" [text]="true" (onClick)="goHome()"/>
+
+    <div class="register-background"></div>
+
+    <div class="register-overlay"></div>
+
+    <main class="register-content">
+
+        <p-card styleClass="register-card">
+
+            <ng-template pTemplate="header">
+
+                <header class="register-header">
+
+                    <span class="register-category">
+                        NecroHome
+                    </span>
+
+                    <h1>
+                        {{ config.title }}
+                    </h1>
+
+                    <p>
+                        {{ config.subtitle }}
+                    </p>
+
+                </header>
+
+            </ng-template>
+
+
+            <form class="register-form" [formGroup]="registerForm" (ngSubmit)="submit()" novalidate>
+
+                <!-- Usuário -->
+                <div class="form-group">
+
+                    <label for="username">
+                        {{ config.fields.username.label }}
+                    </label>
+
+                    <input pInputText id="username" type="text" formControlName="username"
+                        [placeholder]="config.fields.username.placeholder"
+                        [maxlength]="config.fields.username.maxLength" autocomplete="username" fluid
+                        [invalid]="isInvalid(username)" />
+
+                    @if (isInvalid(username)) {
+
+                    <p-message severity="error" variant="simple" size="small">
+                        Informe um usuário.
+                    </p-message>
+
+                    }
+
+                </div>
+
+
+                <!-- Senha -->
+                <div class="form-group">
+
+                    <label for="password">
+                        {{ config.fields.password.label }}
+                    </label>
+
+                    <p-password inputId="password" formControlName="password"
+                        [placeholder]="config.fields.password.placeholder"
+                        [maxlength]="config.fields.password.maxLength" autocomplete="new-password" [feedback]="false"
+                        [toggleMask]="true" fluid [invalid]="isInvalid(password)" />
+
+                    @if (isInvalid(password)) {
+
+                    <p-message severity="error" variant="simple" size="small">
+                        Informe uma senha.
+                    </p-message>
+
+                    }
+
+                </div>
+
+
+                <!-- Confirmar senha -->
+                <div class="form-group">
+
+                    <label for="passwordConfirm">
+                        {{ config.fields.passwordConfirm.label }}
+                    </label>
+
+                    <p-password inputId="passwordConfirm" formControlName="passwordConfirm"
+                        [placeholder]="config.fields.passwordConfirm.placeholder"
+                        [maxlength]="config.fields.passwordConfirm.maxLength" autocomplete="new-password"
+                        [feedback]="false" [toggleMask]="true" fluid [invalid]="
+                            isInvalid(passwordConfirm) ||
+                            passwordsDoNotMatch()
+                        " />
+
+                    @if (passwordsDoNotMatch()) {
+
+                    <p-message severity="error" variant="simple" size="small">
+                        As senhas não são iguais.
+                    </p-message>
+
+                    } @else if (isInvalid(passwordConfirm)) {
+
+                    <p-message severity="error" variant="simple" size="small">
+                        Confirme sua senha.
+                    </p-message>
+
+                    }
+
+                </div>
+
+                @if (config.fields.gender) {
+                <div class="form-group">
+                    <label for="gender">{{ config.fields.gender.label }}</label>
+
+                    <p-select id="gender" formControlName="gender" [options]="config.fields.gender.options"
+                        optionLabel="label" optionValue="value" [placeholder]="config.fields.gender.placeholder" fluid
+                        [invalid]="isInvalid(gender)" />
+
+                    @if (isInvalid(gender)) {
+                    <p-message severity="error" variant="simple" size="small">
+                        Selecione seu gênero.
+                    </p-message>
+                    }
+                </div>
+                }
+
+                <!-- E-mail -->
+                <div class="form-group">
+
+                    <label for="email">
+                        {{ config.fields.email.label }}
+                    </label>
+
+                    <input pInputText id="email" type="email" formControlName="email"
+                        [placeholder]="config.fields.email.placeholder" [maxlength]="config.fields.email.maxLength"
+                        autocomplete="email" fluid [invalid]="isInvalid(email)" />
+
+                    @if (isInvalid(email)) {
+
+                    <p-message severity="error" variant="simple" size="small">
+
+                        @if (email.hasError('email')) {
+                        Informe um e-mail válido.
+                        } @else {
+                        Informe seu e-mail.
+                        }
+
+                    </p-message>
+
+                    }
+
+                </div>
+
+
+                <p-message severity="info" variant="simple" size="small" class="register-info">
+                    Usuário e senha possuem limite de
+                    {{ config.fields.username.maxLength }}
+                    caracteres.
+                </p-message>
+
+
+                <p-button type="submit" [label]="config.button" fluid styleClass="register-button" />
+
+            </form>
+
+        </p-card>
+
+    </main>
+
+</div>

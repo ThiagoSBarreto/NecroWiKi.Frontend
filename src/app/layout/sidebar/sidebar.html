@@ -1,4 +1,18 @@
 <aside class="sidebar">
+    <section class="sidebar-section" class="home">
+        <h3>
+            <span>
+                NecroHome
+            </span>
+
+            <a class="sidebar-link" routerLink="/">
+                <i class="pi pi-home"></i>
+                <span>
+                    Home
+                </span>
+            </a>
+        </h3>
+    </section>
 
     @for (game of wikiItems; track game.id) {
     <section class="sidebar-section" [class]="game.theme">
@@ -8,7 +22,6 @@
                 {{ game.title }}
             </span>
         </h3>
-
 
         @for (link of game.links; track link.route) {
 
