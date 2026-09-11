@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CardModule } from 'primeng/card';
@@ -6,9 +6,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
-import { REGISTER_CONFIG, RegisterConfig } from '../../config/register.config';
 import { SelectModule } from 'primeng/select';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { REGISTER_CONFIG, RegisterConfig } from '../../config/register.config';
 import { BackendService } from '../../services/backend.service';
 import { RegisterModel } from '../../models/register.model';
 
@@ -18,7 +19,6 @@ import { RegisterModel } from '../../models/register.model';
     imports: [
         CommonModule,
         ReactiveFormsModule,
-
         CardModule,
         InputTextModule,
         PasswordModule,
@@ -35,8 +35,7 @@ import { RegisterModel } from '../../models/register.model';
 })
 export class RegisterComponent implements OnInit {
 
-    type: string = 'wow';
-
+    type: string = '';
     config!: RegisterConfig;
 
     submitted = false;
@@ -47,7 +46,8 @@ export class RegisterComponent implements OnInit {
         private readonly fb: FormBuilder,
         private readonly route: ActivatedRoute,
         private readonly router: Router,
-        private backendService: BackendService
+        private readonly backendService: BackendService,
+        private readonly cdr: ChangeDetectorRef
     ) {
         this.registerForm = this.fb.group({
             username: ['', [Validators.required, Validators.maxLength(16)]],
@@ -67,23 +67,38 @@ export class RegisterComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
-            const type: string | null = params.get('type');
+            const type = params.get('type');
 
             if (type !== 'wow' && type !== 'ragnarok') {
                 throw new Error(`Tipo de cadastro inválido: ${type}`);
             }
 
-            this.type = type;
-            this.config = REGISTER_CONFIG[this.type];
-
-            if (this.config.fields.gender) {
-                this.gender.setValidators([Validators.required]);
-            } else {
-                this.gender.clearValidators();
+            if (this.type !== type) {
+                this.type = type;
+                this.config = REGISTER_CONFIG[type];
+                this.submitted = false;
+                this.registerForm.reset({
+                    username: '',
+                    password: '',
+                    passwordConfirm: '',
+                    email: '',
+                    gender: '',
+                });
+                this.updateGenderValidator();
+                this.cdr.markForCheck();
             }
-
-            this.gender.updateValueAndValidity();
         });
+    }
+
+    private updateGenderValidator(): void {
+        if (this.config.fields.gender) {
+            this.gender.setValidators([Validators.required]);
+        } else {
+            this.gender.clearValidators();
+            this.gender.reset('');
+        }
+
+        this.gender.updateValueAndValidity();
     }
 
     get username() {
@@ -142,12 +157,11 @@ export class RegisterComponent implements OnInit {
         this.backendService.registerClient(this.type, model).subscribe({
             next: (response) => {
                 console.log(response);
-                this.registerForm.reset();
             },
             error: (err) => {
                 console.log(err);
             }
-        })
+        });
     }
 
     goHome(): void {
