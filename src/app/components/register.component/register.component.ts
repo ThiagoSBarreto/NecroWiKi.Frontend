@@ -9,6 +9,8 @@ import { MessageModule } from 'primeng/message';
 import { REGISTER_CONFIG, RegisterConfig } from '../../config/register.config';
 import { SelectModule } from 'primeng/select';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BackendService } from '../../services/backend.service';
+import { RegisterModel } from '../../models/register.model';
 
 @Component({
     selector: 'app-register',
@@ -24,13 +26,16 @@ import { ActivatedRoute, Router } from '@angular/router';
         MessageModule,
         SelectModule
     ],
+    providers: [
+        BackendService
+    ],
     templateUrl: './register.component.html',
     styleUrl: './register.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent implements OnInit {
 
-    @Input() type = 'wow';
+    @Input() type: string = 'wow';
 
     config!: RegisterConfig;
 
@@ -41,7 +46,8 @@ export class RegisterComponent implements OnInit {
     constructor(
         private readonly fb: FormBuilder,
         private readonly route: ActivatedRoute,
-        private readonly router: Router
+        private readonly router: Router,
+        private backendService: BackendService
     ) {
         this.registerForm = this.fb.group({
             username: ['', [Validators.required, Validators.maxLength(16)]],
@@ -60,7 +66,9 @@ export class RegisterComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.type = this.route.snapshot.paramMap.get('type') ?? 'wow';
+        if (this.route.snapshot.paramMap.get('type') == 'wow') {
+            this.type = 'wow';
+        }
 
         this.config = REGISTER_CONFIG[this.type];
 
@@ -120,10 +128,23 @@ export class RegisterComponent implements OnInit {
             return;
         }
 
-        console.log('Register:', {
-            type: this.type,
-            ...this.registerForm.value,
-        });
+        const formValue = this.registerForm.value;
+
+        const model: RegisterModel = new RegisterModel(
+            formValue.username ?? '',
+            formValue.password ?? '',
+            formValue.email ?? '',
+            formValue.gender ?? ''
+        );
+
+        this.backendService.registerClient(this.type, model).subscribe({
+            next: (response) => {
+                console.log(response);
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        })
     }
 
     goHome(): void {
