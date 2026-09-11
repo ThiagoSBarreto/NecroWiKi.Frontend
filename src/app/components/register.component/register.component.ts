@@ -35,7 +35,7 @@ import { RegisterModel } from '../../models/register.model';
 })
 export class RegisterComponent implements OnInit {
 
-    @Input() type: string = 'wow';
+    type: string = 'wow';
 
     config!: RegisterConfig;
 
@@ -69,21 +69,12 @@ export class RegisterComponent implements OnInit {
         this.route.paramMap.subscribe(params => {
             const type: string | null = params.get('type');
 
-            if (type === 'wow' || type === 'ragnarok') {
-                this.type = type;
-            } else {
-                throw new Error(
-                    `Tipo de cadastro inválido: ${type}`
-                );
+            if (type !== 'wow' && type !== 'ragnarok') {
+                throw new Error(`Tipo de cadastro inválido: ${type}`);
             }
 
+            this.type = type;
             this.config = REGISTER_CONFIG[this.type];
-
-            if (!this.config) {
-                throw new Error(
-                    `Configuração de cadastro não encontrada: ${this.type}`
-                );
-            }
 
             if (this.config.fields.gender) {
                 this.gender.setValidators([Validators.required]);
@@ -151,6 +142,7 @@ export class RegisterComponent implements OnInit {
         this.backendService.registerClient(this.type, model).subscribe({
             next: (response) => {
                 console.log(response);
+                this.registerForm.reset();
             },
             error: (err) => {
                 console.log(err);
