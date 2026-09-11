@@ -68,6 +68,8 @@ export class RegisterComponent implements OnInit {
     ngOnInit(): void {
         if (this.route.snapshot.paramMap.get('type') == 'wow') {
             this.type = 'wow';
+        } else if (this.route.snapshot.paramMap.get('type') == 'ragnarok') {
+            this.type = 'ragnarok';
         }
 
         this.config = REGISTER_CONFIG[this.type];
