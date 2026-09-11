@@ -66,24 +66,33 @@ export class RegisterComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        if (this.route.snapshot.paramMap.get('type') == 'wow') {
-            this.type = 'wow';
-        } else if (this.route.snapshot.paramMap.get('type') == 'ragnarok') {
-            this.type = 'ragnarok';
-        }
+        this.route.paramMap.subscribe(params => {
+            const type: string | null = params.get('type');
 
-        this.config = REGISTER_CONFIG[this.type];
+            if (type === 'wow' || type === 'ragnarok') {
+                this.type = type;
+            } else {
+                throw new Error(
+                    `Tipo de cadastro inválido: ${type}`
+                );
+            }
 
-        if (!this.config) {
-            throw new Error(
-                `Configuração de cadastro não encontrada: ${this.type}`
-            );
-        }
+            this.config = REGISTER_CONFIG[this.type];
 
-        if (this.config.fields.gender) {
-            this.gender.setValidators([Validators.required]);
+            if (!this.config) {
+                throw new Error(
+                    `Configuração de cadastro não encontrada: ${this.type}`
+                );
+            }
+
+            if (this.config.fields.gender) {
+                this.gender.setValidators([Validators.required]);
+            } else {
+                this.gender.clearValidators();
+            }
+
             this.gender.updateValueAndValidity();
-        }
+        });
     }
 
     get username() {
