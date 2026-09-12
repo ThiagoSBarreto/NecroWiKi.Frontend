@@ -74,6 +74,40 @@ export class PlayerComponent implements OnInit, OnDestroy {
     }
 
     private destroyEmulator(): void {
+        const windowReference: any = window as any;
+
+        try {
+            if (windowReference.EJS_emulator?.gameManager?.toggleMainLoop) {
+                windowReference.EJS_emulator.gameManager.toggleMainLoop(0);
+            }
+
+            if (typeof windowReference.EJS_emulator?.pause === 'function') {
+                windowReference.EJS_emulator.pause(true);
+            }
+
+            if (windowReference.EJS_emulator?.Module?.AL?.currentCtx?.audioCtx) {
+                const audioContext = windowReference.EJS_emulator.Module.AL.currentCtx.audioCtx;
+                if (audioContext.state !== 'closed') {
+                    try {
+                        audioContext.suspend();
+                        audioContext.close();
+                    } catch {
+                        // Contexto já finalizado pelo navegador.
+                    }
+                }
+            }
+
+            if (windowReference.EJS_emulator?.Module?.abort) {
+                try {
+                    windowReference.EJS_emulator.Module.abort();
+                } catch {
+                    // Runtime já terminou.
+                }
+            }
+        } catch {
+            // Ignora falhas de limpeza em rota rápida.
+        }
+
         const gameRoot = document.getElementById('game');
         if (gameRoot) {
             gameRoot.innerHTML = '';
@@ -115,5 +149,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
         delete windowReference.EJS_threads;
         delete windowReference.EJS_disableDatabases;
         delete windowReference.EJS_disableLocalStorage;
+        delete windowReference.EJS_emulator;
     }
 }
