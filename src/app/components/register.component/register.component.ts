@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { REGISTER_CONFIG, RegisterConfig } from '../../config/register.config';
 import { BackendService } from '../../services/backend.service';
-import { RegisterModel } from '../../models/register.model';
+import { RegisterModel } from '../../models/register.models/register.model';
 
 @Component({
     selector: 'app-register',

@@ -15,5 +15,9 @@ export const routes: Routes = [
     {
         path: 'register/:type',
         loadComponent: () => import('./components/register.component/register.component').then(m => m.RegisterComponent)
+    },
+    {
+        path: 'arcade/n64',
+        loadComponent: () => import('./components/arcade/n64.component/n64.component').then(m => m.N64LibraryComponent)
     }
 ];

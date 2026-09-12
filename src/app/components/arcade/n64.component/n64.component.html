@@ -1,0 +1,163 @@
+<div class="n64-library">
+
+    <div class="library-header">
+
+        <div class="header-left">
+
+            <p-button icon="pi pi-arrow-left" severity="secondary" [text]="true" [rounded]="true"
+                pTooltip="Voltar para Home" tooltipPosition="bottom" (onClick)="goHome()">
+            </p-button>
+
+            <div class="header-title">
+                <h1>Nintendo 64</h1>
+            </div>
+
+            <div class="system-icon">
+                <img src="/images/nintendo64.png" alt="Nintendo 64" />
+            </div>
+        </div>
+
+        <div class="header-actions">
+
+            <p-button label="Adicionar jogo" icon="pi pi-plus" (onClick)="openUpload()">
+            </p-button>
+
+        </div>
+
+    </div>
+
+    <div class="library-toolbar">
+
+        <div class="search-wrapper">
+
+            <p-inputgroup>
+
+                <p-inputgroup-addon>
+                    <i class="pi pi-search"></i>
+                </p-inputgroup-addon>
+
+                <input pInputText type="text" placeholder="Buscar por nome, gênero, ano, desenvolvedora..."
+                    [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" />
+
+            </p-inputgroup>
+
+        </div>
+
+        <div class="filters-wrapper">
+
+            <p-select [options]="genres" [(ngModel)]="selectedGenre" placeholder="Todos os gêneros" [showClear]="true"
+                (onChange)="onFilterChange()">
+            </p-select>
+
+            <p-select [options]="years" [(ngModel)]="selectedYear" placeholder="Todos os anos" [showClear]="true"
+                (onChange)="onFilterChange()">
+            </p-select>
+
+            <p-select [options]="sortOptions" optionLabel="label" optionValue="value" [(ngModel)]="selectedSort"
+                placeholder="Ordenar por" (onChange)="onFilterChange()">
+            </p-select>
+
+            <p-button icon="pi pi-filter-slash" severity="secondary" [outlined]="true" pTooltip="Limpar filtros"
+                tooltipPosition="bottom" (onClick)="clearFilters()">
+            </p-button>
+
+        </div>
+
+    </div>
+
+    <div class="results-header">
+
+        <div class="results-description">
+            <strong>{{ filteredGames.length }}</strong>
+            jogo(s) encontrado(s)
+        </div>
+
+        <div class="results-context" *ngIf="searchTerm || selectedGenre || selectedYear">
+
+            Filtros ativos
+
+        </div>
+
+    </div>
+
+    <div class="games-grid" *ngIf="filteredGames.length > 0">
+
+        <div class="game-card" *ngFor="let game of filteredGames" (click)="openGame(game)">
+
+            <div class="game-cover">
+
+                <img [src]="getCoverImage(game)" [alt]="game.name" />
+
+                <div class="cover-overlay">
+
+                    <p-button label="Jogar" icon="pi pi-play" severity="contrast" [rounded]="true"
+                        (onClick)="openGame(game); $event.stopPropagation()">
+                    </p-button>
+
+                </div>
+
+                <div class="age-rating" *ngIf="game.ageRating">
+
+                    {{ game.ageRating }}
+
+                </div>
+
+            </div>
+
+            <div class="game-content">
+
+                <div class="game-meta">
+
+                    <span *ngIf="game.releaseYear">
+                        {{ game.releaseYear }}
+                    </span>
+
+                    <span *ngIf="game.genre">
+                        {{ game.genre }}
+                    </span>
+
+                </div>
+
+                <h2>
+                    {{ game.name }}
+                </h2>
+
+                <p *ngIf="game.description">
+                    {{ game.description }}
+                </p>
+
+                <div class="game-footer">
+
+                    <span>
+                        {{ game.developer || 'Desenvolvedora desconhecida' }}
+                    </span>
+
+                    <i class="pi pi-angle-right"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="empty-state" *ngIf="filteredGames.length === 0">
+
+        <div class="empty-icon">
+            <i class="pi pi-search"></i>
+        </div>
+
+        <h2>Nenhum jogo encontrado</h2>
+
+        <p>
+            Não encontramos jogos com os filtros selecionados.
+        </p>
+
+        <p-button label="Limpar filtros" icon="pi pi-filter-slash" severity="secondary" [outlined]="true"
+            (onClick)="clearFilters()">
+        </p-button>
+
+    </div>
+
+</div>
