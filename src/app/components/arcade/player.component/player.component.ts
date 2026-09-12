@@ -63,6 +63,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
         windowReference.EJS_pathtodata = '/emulatorjs/data/';
         windowReference.EJS_startOnLoaded = true;
         windowReference.EJS_threads = false;
+        windowReference.EJS_disableDatabases = true;
+        windowReference.EJS_disableLocalStorage = true;
 
         this.emulatorScript = document.createElement('script');
         this.emulatorScript.src = '/emulatorjs/data/loader.js';
@@ -83,6 +85,22 @@ export class PlayerComponent implements OnInit, OnDestroy {
         }
 
         this.clearEmulatorGlobals();
+        this.clearEmulatorDatabases();
+    }
+
+    private clearEmulatorDatabases(): void {
+        if (!('indexedDB' in window)) {
+            return;
+        }
+
+        ['EmulatorJS-core', 'EmulatorJS-roms', 'EmulatorJS-bios', 'EmulatorJS-states']
+            .forEach(dbName => {
+                try {
+                    indexedDB.deleteDatabase(dbName);
+                } catch {
+                    // Ignora falhas de exclusão do banco em navegações rápidas.
+                }
+            });
     }
 
     private clearEmulatorGlobals(): void {
@@ -95,5 +113,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
         delete windowReference.EJS_pathtodata;
         delete windowReference.EJS_startOnLoaded;
         delete windowReference.EJS_threads;
+        delete windowReference.EJS_disableDatabases;
+        delete windowReference.EJS_disableLocalStorage;
     }
 }
