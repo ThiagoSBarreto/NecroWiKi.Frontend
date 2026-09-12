@@ -138,7 +138,11 @@ For the web UI, adjust only:
 - the container name (`necro-wiki-client`);
 - the Docker network name (`necro_network`), which must be the same network used by the backend repository.
 
-## Notes
+## License and legal note
+
+This repository is a frontend project for the NecroWiKi ecosystem. The code and UI assets are provided for personal, educational, or private deployment use. No official license file is included in this repository, so the project should be treated as a local/private codebase and used only with the permission of its maintainers.
+
+Important: this project references external services, game communities, and game-related media. CORES, ROMs, images, logos, screenshots, and game data must be acquired personally and legally from authorized sources. Do not redistribute protected game content, images, or assets without the necessary authorization. The project must not be used as a platform for piracy or unauthorized distribution of copyrighted material.
 
 The application uses `environment.ts` for local development and `environment.prod.ts` for production. The backend context is configured through `backendContext` and used by the registration and arcade services to communicate with the project API.
 

@@ -29,6 +29,10 @@ yarn-error.log
 !.vscode/mcp.json
 .history/*
 
+# EmulatorJS local cores and third-party binary assets
+public/emulatorjs/data/cores/
+public/emulatorjs/data/cores/**
+
 # Miscellaneous
 /.angular/cache
 .sass-cache/
