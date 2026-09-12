@@ -180,7 +180,7 @@ export class UploadComponent {
         this.gameSystemService.uploadGame(this.systemId, formData).subscribe({
             next: (response) => {
                 if (response?.message === 'success') {
-                    this.toastService.success('Sucesso', 'Jogo adicionado com sucesso!');
+                    this.toastService.success('Sucesso', 'Jogo adicionado com sucesso! Recarregue a página para exibi-lo!');
                     this.closePopup(true);
                     return;
                 }
