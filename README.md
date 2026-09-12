@@ -1,59 +1,117 @@
-# Necrowiki
+# NecroWiKi Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.3.
+This repository contains the Angular web interface for the **NecroWiKi** project, a central access point for a collection of services, communities, and retro/online games organized around a shared visual identity and navigation experience.
 
-## Development server
+The frontend acts as the main portal for the NecroWiKi experience, connecting:
 
-To start a local development server, run:
+- a home page with categories and external links;
+- account registration flows for games and communities;
+- an arcade game catalog organized by platform;
+- ROM playback through a web-based emulator library using local `EmulatorJS` assets;
+- integrations with external services and backend APIs.
 
-```bash
-ng serve
+## Overview
+
+The application is built as an Angular 21 SPA with dynamic routing and standalone components. The main navigation is defined in `src/app/app.routes.ts`, while the portal navigation and link configuration lives in `src/app/config/wiki.config.ts`.
+
+The experience is organized around these main areas:
+
+- `home`: main portal page;
+- `register/:type`: community/game registration flows;
+- `arcade/:system`: ROM library by arcade system;
+- `arcade/:system/play`: game playback screen using the app player.
+
+## Main features
+
+### Wiki portal
+
+The landing page presents the NecroWiKi ecosystem with sections such as:
+
+- NecroHome
+- NecroFlix
+- NecroArcade
+- classic game services such as WoW, Ragnarok Online, Diablo II, and retro platforms.
+
+### Account registration
+
+The project includes a custom registration configuration in `register.config.ts`, with visual themes and form fields adapted for each game or community.
+
+### Arcade library
+
+The arcade area is handled by the `GameSystemService`, which communicates with the backend to list ROMs and upload files for a specific system.
+
+The gamesystem page includes:
+
+- name search;
+- sorting;
+- ROM upload;
+- opening the player view with system and ROM parameters.
+
+### EmulatorJS
+
+The `public/emulatorjs` directory contains the local web emulator infrastructure used to run ROMs directly in the browser.
+
+## Technology stack
+
+- Angular 21
+- TypeScript
+- RxJS
+- PrimeNG
+- PrimeIcons
+- Angular Router
+- Vitest
+- EmulatorJS
+
+## Project structure
+
+```text
+src/
+  app/
+    components/       - UI components and arcade/register flows
+    config/           - wiki and registration configuration
+    home/             - homepage
+    layout/           - header, sidebar, shell, footer
+    models/           - model interfaces
+    services/         - backend integration services
+  environments/       - local and production API configuration
+public/
+  emulatorjs/         - web emulator and local assets
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## How to run
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Install dependencies:
 
 ```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Start the development server:
 
 ```bash
-ng generate --help
+npm start
 ```
 
-## Building
+Then open the application at:
 
-To build the project run:
+```text
+http://localhost:4200/
+```
+
+## How to build
 
 ```bash
-ng build
+npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Backend repository
 
-## Running unit tests
+The API and services behind NecroWiKi are hosted in the separate repository:
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+[NecroHome/NecroWiKi.Backend](https://github.com/NecroHome/NecroWiKi.Backend)
 
-```bash
-ng test
-```
+## Notes
 
-## Running end-to-end tests
+The application uses `environment.ts` for local development and `environment.prod.ts` for production. The backend context is configured through `backendContext` and used by the registration and arcade services to communicate with the project API.
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This repository represents only the frontend of the NecroWiKi platform. The backend, external services, and hosting infrastructure must be available alongside it for the portal to work completely.
