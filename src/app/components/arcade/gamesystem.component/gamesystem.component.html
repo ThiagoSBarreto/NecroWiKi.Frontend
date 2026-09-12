@@ -119,3 +119,5 @@
     </div>
 
 </div>
+
+<app-upload-popup *ngIf="showUpload" [systemId]="systemId" (closed)="closeUpload()"></app-upload-popup>

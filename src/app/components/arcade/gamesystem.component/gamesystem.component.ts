@@ -18,8 +18,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { GameSystemService } from '../../../services/gamesystem.service';
-import { ArcadeGameModel } from '../../../models/arcade.models/arcade.game.model';
-
+import { ArcadeGameModel } from '../../../models/arcade.models/arcade.game.model';import { UploadComponent } from '../upload.component/upload.component';
 interface ArcadeSystemMeta {
     id: string;
     label: string;
@@ -39,13 +38,16 @@ interface ArcadeSystemMeta {
         TagModule,
         TooltipModule,
         InputGroupModule,
-        InputGroupAddonModule
+        InputGroupAddonModule,
+        UploadComponent
     ],
     templateUrl: './gamesystem.component.html',
     styleUrl: './gamesystem.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GamesystemComponent implements OnInit {
+
+    showUpload = false;
 
     games: ArcadeGameModel[] = [];
     filteredGames: ArcadeGameModel[] = [];
@@ -176,7 +178,16 @@ export class GamesystemComponent implements OnInit {
     }
 
     openUpload(): void {
-        this.router.navigate([`/arcade/${this.systemId}/upload`]);
+        this.showUpload = true;
+    }
+
+    closeUpload(success = false): void {
+        this.showUpload = false;
+        this.cdr.markForCheck();
+
+        if (success) {
+            this.loadGamesFromBackend(this.systemId);
+        }
     }
 
     openGame(game: ArcadeGameModel): void {

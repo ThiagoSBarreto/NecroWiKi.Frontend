@@ -1,0 +1,78 @@
+<p-dialog [(visible)]="dialogVisible" [modal]="true" [draggable]="true" [resizable]="false" [closeOnEscape]="true"
+    [closable]="true" [dismissableMask]="true" [style]="{ width: 'auto', height: 'auto' }" styleClass="upload-dialog"
+    (onHide)="handleDialogHide()">
+
+    <ng-template pTemplate="header">
+        <div class="upload-dialog__header">
+            <div class="upload-dialog__title">
+                <span class="upload-dialog__title-text">Adicionar Jogo</span>
+                <span class="upload-dialog__system">
+                    <img [src]="platformMeta.icon" [alt]="platformMeta.label" />
+                    <span>{{ platformMeta.label }}</span>
+                </span>
+            </div>
+        </div>
+    </ng-template>
+
+    <div class="upload-form-grid">
+        <section class="form-section">
+            <label class="drop-zone" for="romInput" (drop)="onRomFilesDropped($event)" (dragover)="onRomDragOver($event)">
+                <input id="romInput" type="file" multiple (change)="onRomFilesSelected($event)" />
+
+                <span class="drop-zone__content">
+                    <span class="drop-zone__icon">
+                        <i class="pi pi-upload"></i>
+                    </span>
+
+                    <span class="drop-zone__text">
+                        <strong>Arraste a ROM aqui</strong>
+                        <small>ou clique para selecionar arquivos</small>
+                    </span>
+                </span>
+            </label>
+
+            <div class="file-list" *ngIf="romFiles.length > 0">
+                <div class="file-list__item" *ngFor="let file of romFiles">
+                    <i class="pi pi-file"></i>
+                    <span>{{ file.name }}</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <label class="cover-drop-zone" for="coverInput" (drop)="onCoverDropped($event)" (dragover)="onCoverDragOver($event)">
+                <input id="coverInput" type="file" accept="image/png,.png" (change)="onCoverSelected($event)" />
+
+                <span class="cover-preview" *ngIf="coverPreview; else emptyCover">
+                    <img [src]="coverPreview" alt="Pré-visualização da capa" />
+                </span>
+
+                <ng-template #emptyCover>
+                    <span class="cover-placeholder">
+                        <i class="pi pi-image"></i>
+                        <small>Selecionar capa</small>
+                    </span>
+                </ng-template>
+            </label>
+        </section>
+
+        <section class="form-section full-width">
+            <div class="field-label">
+                <span class="label-text">Nome do jogo</span>
+            </div>
+
+            <input pInputText type="text" class="game-name-input" [(ngModel)]="gameName"
+                placeholder="Informe o nome do jogo" />
+        </section>
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="upload-modal__footer">
+            <p-button label="Cancelar" icon="pi pi-times" severity="secondary" (onClick)="cancel()">
+            </p-button>
+
+            <p-button label="Confirmar" icon="pi pi-check" (onClick)="confirm()">
+            </p-button>
+        </div>
+    </ng-template>
+</p-dialog>
