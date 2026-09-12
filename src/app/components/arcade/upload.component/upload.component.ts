@@ -179,13 +179,13 @@ export class UploadComponent {
 
         this.gameSystemService.uploadGame(this.systemId, formData).subscribe({
             next: (response) => {
-                if (response === 'success') {
+                if (response?.message === 'success') {
                     this.toastService.success('Sucesso', 'Jogo adicionado com sucesso!');
                     this.closePopup(true);
                     return;
                 }
 
-                this.toastService.error('Erro', response);
+                this.toastService.error('Erro', response?.message ?? 'Não foi possível adicionar o jogo.');
             },
             error: (err) => {
                 const message = err?.error?.message ?? err?.message ?? 'Não foi possível adicionar o jogo.';

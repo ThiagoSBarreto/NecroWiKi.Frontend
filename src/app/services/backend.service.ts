@@ -4,6 +4,10 @@ import { Observable } from "rxjs";
 import { RegisterModel } from "../models/register.models/register.model";
 import { environment } from "../../environments/environment";
 
+export interface ApiMessageResponse {
+    message: string;
+}
+
 @Injectable()
 export class BackendService {
     constructor (
@@ -12,7 +16,7 @@ export class BackendService {
 
     }
 
-    registerClient(type: string, register: RegisterModel): Observable<string> {
-        return this.http.post<string>(`${environment.backendContext}register/${type}`, register);
+    registerClient(type: string, register: RegisterModel): Observable<ApiMessageResponse> {
+        return this.http.post<ApiMessageResponse>(`${environment.backendContext}register/${type}`, register);
     }
 }

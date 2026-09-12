@@ -5,6 +5,10 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ArcadeGameModel } from '../models/arcade.models/arcade.game.model';
 
+export interface ApiMessageResponse {
+    message: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -19,7 +23,7 @@ export class GameSystemService {
         return this.http.get<ArcadeGameModel[]>(`${environment.backendContext}gamesystem/${system}/roms`);
     }
 
-    uploadGame(system: string, payload: FormData): Observable<string> {
-        return this.http.post<string>(`${environment.backendContext}gamesystem/${system}/upload`, payload);
+    uploadGame(system: string, payload: FormData): Observable<ApiMessageResponse> {
+        return this.http.post<ApiMessageResponse>(`${environment.backendContext}gamesystem/${system}/roms`, payload);
     }
 }

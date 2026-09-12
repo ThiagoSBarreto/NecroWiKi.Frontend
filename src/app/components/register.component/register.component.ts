@@ -158,12 +158,12 @@ export class RegisterComponent implements OnInit {
 
         this.backendService.registerClient(this.type, model).subscribe({
             next: (response) => {
-                if (response === 'success') {
+                if (response?.message === 'success') {
                     this.toastService.success('Sucesso', 'Conta cadastrada com sucesso!');
                     return;
                 }
 
-                this.toastService.error('Erro', response);
+                this.toastService.error('Erro', response?.message ?? 'Não foi possível cadastrar a conta.');
             },
             error: (err) => {
                 const message = err?.error?.message ?? err?.message ?? 'Não foi possível cadastrar a conta.';
