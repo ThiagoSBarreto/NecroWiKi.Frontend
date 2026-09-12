@@ -7,3 +7,9 @@ services:
     ports:
       - "6019:80"
     restart: always
+    networks:
+      - necro_network
+
+networks:
+  necro_network:
+    external: true
