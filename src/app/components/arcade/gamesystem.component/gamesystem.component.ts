@@ -180,10 +180,14 @@ export class GamesystemComponent implements OnInit {
     }
 
     openGame(game: ArcadeGameModel): void {
-        const playUrl = `${window.location.origin}/arcade/${this.systemId}/play?` +
-            `core=${encodeURIComponent(this.systemId)}` +
-            `&rom=${encodeURIComponent(game.romPath)}`;
-
-        window.open(playUrl, '_blank', 'noopener,noreferrer');
+        this.router.navigate(
+            ['/arcade', this.systemId, 'play'],
+            {
+                queryParams: {
+                    core: this.systemId,
+                    rom: game.romPath
+                }
+            }
+        );
     }
 }
