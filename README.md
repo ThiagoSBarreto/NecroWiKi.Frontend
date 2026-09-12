@@ -110,6 +110,40 @@ The API and services behind NecroWiKi are hosted in the separate repository:
 
 [NecroHome/NecroWiKi.Backend](https://github.com/NecroHome/NecroWiKi.Backend)
 
+## Docker Compose
+
+The frontend repository uses a simple container definition. The compose file can be configured with:
+
+```yaml
+services:
+  angular-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: necro-wiki-client
+    ports:
+      - "6019:80"
+    restart: always
+    networks:
+      - necro_network
+
+networks:
+  necro_network:
+    external: true
+```
+
+For the web UI, adjust only:
+
+- the web page port (`6019:80`);
+- the container name (`necro-wiki-client`);
+- the Docker network name (`necro_network`), which must be the same network used by the backend repository.
+
+## Backend repository
+
+The API and services behind NecroWiKi are hosted in the separate repository:
+
+[NecroHome/NecroWiKi.Backend](https://github.com/NecroHome/NecroWiKi.Backend)
+
 ## Notes
 
 The application uses `environment.ts` for local development and `environment.prod.ts` for production. The backend context is configured through `backendContext` and used by the registration and arcade services to communicate with the project API.
