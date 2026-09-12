@@ -191,7 +191,7 @@ export const WIKI_CONFIG: WikiItem[] = [
     {
         id: 'arcade',
         title: 'NecroArcade',
-        subtitle: 'SNES | PS1 | N64 | GBA',
+        subtitle: 'SNES | PSX | N64 | GBA',
         image: '/images/n64.png',
         theme: 'arcade',
         route: '/arcade',
@@ -216,8 +216,8 @@ export const WIKI_CONFIG: WikiItem[] = [
                 severity: 'warn'
             },
             {
-                label: 'PS1',
-                route: '/arcade/ps1',
+                label: 'PSX',
+                route: '/arcade/psx',
                 image: '/images/ps1.png',
                 severity: 'danger'
             },

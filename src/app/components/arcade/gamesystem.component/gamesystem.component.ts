@@ -17,9 +17,8 @@ import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-
-import { ArcadeGame } from '../../../models/arcade.models/arcade.game.model';
 import { GameSystemService } from '../../../services/gamesystem.service';
+import { ArcadeGameModel } from '../../../models/arcade.models/arcade.game.model';
 
 interface ArcadeSystemMeta {
     id: string;
@@ -48,8 +47,8 @@ interface ArcadeSystemMeta {
 })
 export class GamesystemComponent implements OnInit {
 
-    games: ArcadeGame[] = [];
-    filteredGames: ArcadeGame[] = [];
+    games: ArcadeGameModel[] = [];
+    filteredGames: ArcadeGameModel[] = [];
 
     searchTerm: string = '';
     selectedSort: string = 'name-asc';
@@ -88,11 +87,6 @@ export class GamesystemComponent implements OnInit {
             label: 'Game Boy Advance',
             icon: '/images/gba.png'
         },
-        ps1: {
-            id: 'ps1',
-            label: 'PlayStation',
-            icon: '/images/ps1.png'
-        },
         psx: {
             id: 'psx',
             label: 'PlayStation',
@@ -111,12 +105,11 @@ export class GamesystemComponent implements OnInit {
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
             const systemKey = (params.get('system') ?? 'n64').toLowerCase();
-            const normalizedSystemKey = systemKey === 'ps1' ? 'psx' : systemKey;
 
-            this.systemId = normalizedSystemKey;
-            this.systemMeta = this.systemMap[systemKey] ?? this.systemMap[normalizedSystemKey] ?? this.systemMap['n64'];
+            this.systemId = systemKey;
+            this.systemMeta = this.systemMap[systemKey] ?? this.systemMap[systemKey] ?? this.systemMap['n64'];
 
-            this.loadGamesFromBackend(normalizedSystemKey);
+            this.loadGamesFromBackend(systemKey);
         });
     }
 
@@ -141,7 +134,7 @@ export class GamesystemComponent implements OnInit {
         this.filteredGames = this.games.filter(game => {
             const matchesSearch =
                 !search ||
-                game.romName.toLowerCase().includes(search);
+                game.name.toLowerCase().includes(search);
 
             return matchesSearch;
         });
@@ -154,11 +147,11 @@ export class GamesystemComponent implements OnInit {
         this.filteredGames = [...this.filteredGames].sort((first, second) => {
             switch (this.selectedSort) {
                 case 'name-desc':
-                    return second.romName.localeCompare(first.romName);
+                    return second.name.localeCompare(first.name);
 
                 case 'name-asc':
                 default:
-                    return first.romName.localeCompare(second.romName);
+                    return first.name.localeCompare(second.name);
             }
         });
     }
@@ -186,11 +179,11 @@ export class GamesystemComponent implements OnInit {
         this.router.navigate([`/arcade/${this.systemId}/upload`]);
     }
 
-    openGame(game: ArcadeGame): void {
-        this.router.navigate(['/arcade', this.systemId, 'game', game.romName]);
+    openGame(game: ArcadeGameModel): void {
+        this.router.navigate(['/arcade', this.systemId, 'game', game.name]);
     }
 
-    getCoverImage(game: ArcadeGame): string {
-        return game.image;
+    getCoverImage(game: ArcadeGameModel): string {
+        return game.imagePath;
     }
 }

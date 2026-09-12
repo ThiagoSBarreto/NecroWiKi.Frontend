@@ -1,4 +1,5 @@
-export interface ArcadeGame {
-    romName: string;
-    image: string;
+export interface ArcadeGameModel {
+    name: string
+    imagePath: string;
+    romPath: string;
 }
