@@ -45,14 +45,6 @@
 
         <div class="filters-wrapper">
 
-            <p-select [options]="genres" [(ngModel)]="selectedGenre" placeholder="Todos os gêneros" [showClear]="true"
-                (onChange)="onFilterChange()">
-            </p-select>
-
-            <p-select [options]="years" [(ngModel)]="selectedYear" placeholder="Todos os anos" [showClear]="true"
-                (onChange)="onFilterChange()">
-            </p-select>
-
             <p-select [options]="sortOptions" optionLabel="label" optionValue="value" [(ngModel)]="selectedSort"
                 placeholder="Ordenar por" (onChange)="onFilterChange()">
             </p-select>
@@ -72,7 +64,7 @@
             jogo(s) encontrado(s)
         </div>
 
-        <div class="results-context" *ngIf="searchTerm || selectedGenre || selectedYear">
+        <div class="results-context" *ngIf="searchTerm">
 
             Filtros ativos
 
@@ -86,7 +78,7 @@
 
             <div class="game-cover">
 
-                <img [src]="getCoverImage(game)" [alt]="game.name" />
+                <img [src]="getCoverImage(game)" [alt]="game.romName" />
 
                 <div class="cover-overlay">
 
@@ -96,40 +88,18 @@
 
                 </div>
 
-                <div class="age-rating" *ngIf="game.ageRating">
-
-                    {{ game.ageRating }}
-
-                </div>
-
             </div>
 
             <div class="game-content">
 
-                <div class="game-meta">
-
-                    <span *ngIf="game.releaseYear">
-                        {{ game.releaseYear }}
-                    </span>
-
-                    <span *ngIf="game.genre">
-                        {{ game.genre }}
-                    </span>
-
-                </div>
-
                 <h2>
-                    {{ game.name }}
+                    {{ game.romName }}
                 </h2>
-
-                <p *ngIf="game.description">
-                    {{ game.description }}
-                </p>
 
                 <div class="game-footer">
 
                     <span>
-                        {{ game.developer || 'Desenvolvedora desconhecida' }}
+                        {{ systemMeta.label }}
                     </span>
 
                     <i class="pi pi-angle-right"></i>

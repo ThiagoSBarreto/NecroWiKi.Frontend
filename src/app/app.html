@@ -1,5 +1,14 @@
 <div class="app-layout">
 
+    <p-toast position="top-right"></p-toast>
+
+    <div class="global-loader" *ngIf="loading">
+        <div class="loader-panel">
+            <span class="loader-spinner"></span>
+            <span class="loader-text">Carregando...</span>
+        </div>
+    </div>
+
     <!-- HEADER -->
     <header class="app-header">
         <app-header></app-header>

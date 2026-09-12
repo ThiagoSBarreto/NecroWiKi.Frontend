@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { REGISTER_CONFIG, RegisterConfig } from '../../config/register.config';
 import { BackendService } from '../../services/backend.service';
 import { RegisterModel } from '../../models/register.models/register.model';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
     selector: 'app-register',
@@ -47,7 +48,8 @@ export class RegisterComponent implements OnInit {
         private readonly route: ActivatedRoute,
         private readonly router: Router,
         private readonly backendService: BackendService,
-        private readonly cdr: ChangeDetectorRef
+        private readonly cdr: ChangeDetectorRef,
+        private readonly toastService: ToastService
     ) {
         this.registerForm = this.fb.group({
             username: ['', [Validators.required, Validators.maxLength(16)]],
@@ -156,10 +158,17 @@ export class RegisterComponent implements OnInit {
 
         this.backendService.registerClient(this.type, model).subscribe({
             next: (response) => {
-                console.log(response);
+                if (response === 'success') {
+                    this.toastService.success('Sucesso', 'Conta cadastrada com sucesso!');
+                    return;
+                }
+
+                this.toastService.error('Erro', response);
             },
             error: (err) => {
-                console.log(err);
+                const message = err?.error?.message ?? err?.message ?? 'Não foi possível cadastrar a conta.';
+
+                this.toastService.error('Erro', message);
             }
         });
     }
