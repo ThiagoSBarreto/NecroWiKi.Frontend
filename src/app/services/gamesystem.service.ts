@@ -24,6 +24,6 @@ export class GameSystemService {
     }
 
     uploadGame(system: string, payload: FormData): Observable<ApiMessageResponse> {
-        return this.http.post<ApiMessageResponse>(`${environment.backendContext}gamesystem/${system}/roms`, payload);
+        return this.http.post<ApiMessageResponse>(`${environment.backendContext}gamesystem/${system}/upload`, payload);
     }
 }
