@@ -50,12 +50,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
         windowReference.EJS_core = core;
         windowReference.EJS_gameUrl = rom;
         windowReference.EJS_gameName = gameName;
-        windowReference.EJS_pathtodata = '/assets/emulatorjs/data/';
+        windowReference.EJS_pathtodata = '/emulatorjs/data/';
         windowReference.EJS_startOnLoaded = true;
         windowReference.EJS_threads = false;
 
         this.emulatorScript = document.createElement('script');
-        this.emulatorScript.src = '/assets/emulatorjs/data/loader.js';
+        this.emulatorScript.src = '/emulatorjs/data/loader.js';
         this.emulatorScript.async = true;
 
         document.body.appendChild(this.emulatorScript);
