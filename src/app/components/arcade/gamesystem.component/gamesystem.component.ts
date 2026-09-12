@@ -182,8 +182,4 @@ export class GamesystemComponent implements OnInit {
     openGame(game: ArcadeGameModel): void {
         this.router.navigate(['/arcade', this.systemId, 'game', game.name]);
     }
-
-    getCoverImage(game: ArcadeGameModel): string {
-        return game.imagePath;
-    }
 }
