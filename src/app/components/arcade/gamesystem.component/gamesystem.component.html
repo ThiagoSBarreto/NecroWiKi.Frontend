@@ -1,4 +1,4 @@
-<div class="n64-library">
+<div class="gamesystem-library">
 
     <div class="library-header">
 
@@ -9,11 +9,11 @@
             </p-button>
 
             <div class="header-title">
-                <h1>Nintendo 64</h1>
+                <h1>{{ systemMeta.label }}</h1>
             </div>
 
             <div class="system-icon">
-                <img src="/images/nintendo64.png" alt="Nintendo 64" />
+                <img [src]="systemMeta.icon" [alt]="systemMeta.label" />
             </div>
         </div>
 

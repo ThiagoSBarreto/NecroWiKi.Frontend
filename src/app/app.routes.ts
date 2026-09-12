@@ -17,7 +17,11 @@ export const routes: Routes = [
         loadComponent: () => import('./components/register.component/register.component').then(m => m.RegisterComponent)
     },
     {
-        path: 'arcade/n64',
-        loadComponent: () => import('./components/arcade/n64.component/n64.component').then(m => m.N64LibraryComponent)
+        path: 'arcade/:system',
+        loadComponent: () => import('./components/arcade/gamesystem.component/gamesystem.component').then(m => m.GamesystemComponent)
+    },
+    {
+        path: 'arcade/:system/upload',
+        loadComponent: () => import('./components/arcade/gamesystem.component/gamesystem.component').then(m => m.GamesystemComponent)
     }
 ];
