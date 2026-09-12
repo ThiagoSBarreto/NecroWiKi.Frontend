@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-player',
@@ -8,11 +8,21 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PlayerComponent implements OnInit, OnDestroy {
     private emulatorScript: HTMLScriptElement | null = null;
+    private systemId = 'n64';
+    private readonly cleanupEmulator = () => this.destroyEmulator();
 
-    constructor(private route: ActivatedRoute) {
+    constructor(
+        private readonly route: ActivatedRoute,
+        private readonly router: Router
+    ) {
+        window.addEventListener('beforeunload', this.cleanupEmulator);
     }
 
     public ngOnInit(): void {
+        this.route.paramMap.subscribe(params => {
+            this.systemId = (params.get('system') ?? 'n64').toLowerCase();
+        });
+
         this.route.queryParams.subscribe(params => {
             const core: string = params['core'];
             const rom: string = params['rom'];
@@ -26,12 +36,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        if (this.emulatorScript) {
-            this.emulatorScript.remove();
-            this.emulatorScript = null;
-        }
+        this.destroyEmulator();
+        window.removeEventListener('beforeunload', this.cleanupEmulator);
+    }
 
-        this.clearEmulatorGlobals();
+    public goBack(): void {
+        this.router.navigate(['/arcade', this.systemId]);
     }
 
     private initializeEmulator(core: string, rom: string): void {
@@ -59,6 +69,20 @@ export class PlayerComponent implements OnInit, OnDestroy {
         this.emulatorScript.async = true;
 
         document.body.appendChild(this.emulatorScript);
+    }
+
+    private destroyEmulator(): void {
+        const gameRoot = document.getElementById('game');
+        if (gameRoot) {
+            gameRoot.innerHTML = '';
+        }
+
+        if (this.emulatorScript) {
+            this.emulatorScript.remove();
+            this.emulatorScript = null;
+        }
+
+        this.clearEmulatorGlobals();
     }
 
     private clearEmulatorGlobals(): void {
