@@ -180,6 +180,14 @@ export class GamesystemComponent implements OnInit {
     }
 
     openGame(game: ArcadeGameModel): void {
-        this.router.navigate(['/arcade', this.systemId, 'game', game.name]);
+        this.router.navigate(
+            ['/arcade', this.systemId, 'play'],
+            {
+                queryParams: {
+                    core: this.systemId,
+                    rom: game.romPath
+                }
+            }
+        );
     }
 }

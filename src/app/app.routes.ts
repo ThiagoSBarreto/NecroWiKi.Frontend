@@ -23,5 +23,9 @@ export const routes: Routes = [
     {
         path: 'arcade/:system/upload',
         loadComponent: () => import('./components/arcade/gamesystem.component/gamesystem.component').then(m => m.GamesystemComponent)
+    },
+    {
+        path: 'arcade/:system/play',
+        loadComponent: () => import('./components/arcade/player.component/player.component').then(m => m.PlayerComponent)
     }
 ];
