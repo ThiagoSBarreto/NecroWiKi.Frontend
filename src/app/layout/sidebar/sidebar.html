@@ -42,6 +42,25 @@
 
         </a>
 
+        } @else if (link.downloadGameName) {
+
+        <a class="sidebar-link" [href]="downloadService.downloadUrl(link.downloadGameName)"
+            target="_blank" rel="noopener noreferrer">
+
+            @if (link.image) {
+            <img [src]="link.image" [alt]="link.label" />
+            }
+
+            @if (link.icon) {
+            <i [class]="link.icon"></i>
+            }
+
+            <span>
+                {{ link.label }}
+            </span>
+
+        </a>
+
         } @else {
 
         <a class="sidebar-link" [routerLink]="link.route" routerLinkActive="active"

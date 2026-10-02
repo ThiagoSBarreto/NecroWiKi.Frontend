@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 
@@ -21,6 +21,7 @@ import { DownloadService } from '../services/download.service';
 export class HomeComponent {
 
     readonly wikiItems = WIKI_CONFIG;
+    private readonly downloadFrame = viewChild.required<ElementRef<HTMLIFrameElement>>('downloadFrame');
 
     constructor(
         private readonly downloadService: DownloadService
@@ -32,7 +33,7 @@ export class HomeComponent {
     }
 
     downloadGame(gameName: string): void {
-        window.location.href = this.downloadService.downloadUrl(gameName);
+        this.downloadFrame().nativeElement.src = this.downloadService.downloadUrl(gameName);
     }
 
 }
