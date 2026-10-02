@@ -186,7 +186,7 @@ export const WIKI_CONFIG: WikiItem[] = [
         links: [
             {
                 label: 'Download',
-                route: '/download/warcraft3',
+                route: '/warcraft3',
                 icon: 'pi pi-download',
                 severity: 'info',
                 downloadGameName: 'Warcraft_III'
@@ -210,14 +210,14 @@ export const WIKI_CONFIG: WikiItem[] = [
         links: [
             {
                 label: 'Download Original',
-                route: '/download/diablo2-original',
+                route: '/diablo2/d2-original',
                 icon: 'pi pi-download',
                 severity: 'danger',
                 downloadGameName: 'Diablo_II'
             },
             {
                 label: 'Download PlugY',
-                route: '/download/diablo2-plugy',
+                route: '/dialbo2/d2-plugy',
                 icon: 'pi pi-download',
                 severity: 'danger',
                 downloadGameName: 'Diablo_II_PlugY'

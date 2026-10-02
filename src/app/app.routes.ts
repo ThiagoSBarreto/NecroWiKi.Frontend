@@ -13,10 +13,6 @@ export const routes: Routes = [
         component: HomeComponent
     },
     {
-        path: 'download/:downloadId',
-        loadComponent: () => import('./download-redirect.component').then(m => m.DownloadRedirectComponent)
-    },
-    {
         path: 'register/:type',
         loadComponent: () => import('./components/register.component/register.component').then(m => m.RegisterComponent)
     },
