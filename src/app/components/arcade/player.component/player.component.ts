@@ -108,7 +108,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
         }
     }
 
-    private openManualSaveStatePicker(windowReference: any): void {
+    private openManualSaveStatePicker(windowReference: any, gameKey: string, gameName: string): void {
         const filePicker = document.createElement('input');
         filePicker.type = 'file';
         filePicker.accept = '.state,application/octet-stream';
@@ -120,8 +120,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
             }
 
             try {
-                gameManager.loadState(new Uint8Array(await file.arrayBuffer()));
-                this.showEmulatorMessage('Save state carregado do arquivo.');
+                const state = new Uint8Array(await file.arrayBuffer());
+                gameManager.loadState(state);
+                this.saveStateService.save(gameKey, state).subscribe({
+                    next: () => this.showEmulatorMessage(`Save state de ${gameName} atualizado no servidor.`),
+                    error: () => this.showEmulatorMessage('Estado carregado, mas não foi possível atualizar o save no servidor.')
+                });
             } catch {
                 this.showEmulatorMessage('Falha ao carregar o save state.');
             }
@@ -129,7 +133,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
         filePicker.click();
     }
 
-    private addManualSaveStateButton(windowReference: any): void {
+    private addManualSaveStateButtons(windowReference: any, gameKey: string, gameName: string): void {
         const loadStateButton = windowReference.EJS_emulator?.elements?.bottomBar?.loadState?.[0];
         if (!loadStateButton || document.getElementById('necrowiki-manual-load-state')) {
             return;
@@ -152,8 +156,50 @@ export class PlayerComponent implements OnInit, OnDestroy {
         label.textContent = 'Carregar arquivo';
 
         button.append(icon, label);
-        button.addEventListener('click', () => this.openManualSaveStatePicker(windowReference));
+        button.addEventListener('click', () => this.openManualSaveStatePicker(windowReference, gameKey, gameName));
         loadStateButton.after(button);
+
+        const downloadButton = document.createElement('button');
+        downloadButton.id = 'necrowiki-download-save-state';
+        downloadButton.type = 'button';
+        downloadButton.classList.add('ejs_menu_button');
+        downloadButton.title = `Baixar save state de ${gameName}`;
+
+        const downloadIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        downloadIcon.setAttribute('viewBox', '0 0 512 512');
+        downloadIcon.setAttribute('role', 'presentation');
+        downloadIcon.setAttribute('focusable', 'false');
+        downloadIcon.innerHTML = '<path fill="currentColor" d="M256 352 96 192h96V32h128v160h96L256 352zM64 400h384v64H64v-64z"/>';
+
+        const downloadLabel = document.createElement('span');
+        downloadLabel.classList.add('ejs_menu_text');
+        downloadLabel.textContent = 'Baixar Save State';
+
+        downloadButton.append(downloadIcon, downloadLabel);
+        downloadButton.addEventListener('click', () => this.downloadSaveState(gameKey, gameName));
+        button.after(downloadButton);
+    }
+
+    private downloadSaveState(gameKey: string, gameName: string): void {
+        this.saveStateService.load(gameKey).subscribe({
+            next: state => {
+                const downloadUrl = URL.createObjectURL(
+                    new Blob([state], { type: 'application/octet-stream' })
+                );
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = `${gameName}.state`;
+                link.click();
+                link.remove();
+                setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+                this.showEmulatorMessage(`Save state de ${gameName} baixado.`);
+            },
+            error: response => {
+                this.showEmulatorMessage(response.status === 404
+                    ? `Nenhum save state encontrado para ${gameName}.`
+                    : 'Falha ao baixar o save state.');
+            }
+        });
     }
 
     private initializeEmulator(core: string, rom: string): void {
@@ -177,8 +223,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
         windowReference.EJS_threads = false;
         windowReference.EJS_disableDatabases = true;
         windowReference.EJS_disableLocalStorage = true;
-        windowReference.EJS_onGameStart = () => this.addManualSaveStateButton(windowReference);
         const saveKey = `${this.systemId}:${romFilename.toLowerCase()}`;
+        windowReference.EJS_onGameStart = () => this.addManualSaveStateButtons(windowReference, saveKey, gameName);
         windowReference.EJS_onSaveState = (data: { state: Uint8Array }) => {
             this.saveStateService.save(saveKey, data.state).subscribe({
                 next: () => this.showEmulatorMessage('Save state armazenado no servidor.'),
