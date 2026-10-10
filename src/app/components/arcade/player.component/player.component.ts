@@ -108,6 +108,27 @@ export class PlayerComponent implements OnInit, OnDestroy {
         }
     }
 
+    private openManualSaveStatePicker(windowReference: any): void {
+        const filePicker = document.createElement('input');
+        filePicker.type = 'file';
+        filePicker.accept = '.state,application/octet-stream';
+        filePicker.addEventListener('change', async () => {
+            const file = filePicker.files?.[0];
+            const gameManager = windowReference.EJS_emulator?.gameManager;
+            if (!file || !gameManager) {
+                return;
+            }
+
+            try {
+                gameManager.loadState(new Uint8Array(await file.arrayBuffer()));
+                this.showEmulatorMessage('Save state carregado do arquivo.');
+            } catch {
+                this.showEmulatorMessage('Falha ao carregar o save state.');
+            }
+        });
+        filePicker.click();
+    }
+
     private initializeEmulator(core: string, rom: string): void {
         const romFilename: string = decodeURIComponent(
             rom.split('/').pop() ?? ''
@@ -129,6 +150,20 @@ export class PlayerComponent implements OnInit, OnDestroy {
         windowReference.EJS_threads = false;
         windowReference.EJS_disableDatabases = true;
         windowReference.EJS_disableLocalStorage = true;
+        windowReference.EJS_Buttons = {
+            loadStateFile: {
+                displayName: 'Carregar arquivo',
+                icon: '<svg viewBox="0 0 512 512"><path id="necrowiki-load-state-file-icon" fill="currentColor" d="M256 32 128 160h80v144h96V160h80L256 32zM96 336h320v96H96v-96z"/></svg>',
+                callback: () => this.openManualSaveStatePicker(windowReference)
+            }
+        };
+        windowReference.EJS_onGameStart = () => {
+            const customButton = document.getElementById('necrowiki-load-state-file-icon')?.closest('button');
+            const loadStateButton = windowReference.EJS_emulator?.elements?.bottomBar?.loadState?.[0];
+            if (customButton && loadStateButton) {
+                loadStateButton.after(customButton);
+            }
+        };
         const saveKey = `${this.systemId}:${romFilename.toLowerCase()}`;
         windowReference.EJS_onSaveState = (data: { state: Uint8Array }) => {
             this.saveStateService.save(saveKey, data.state).subscribe({
@@ -233,6 +268,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
         delete windowReference.EJS_threads;
         delete windowReference.EJS_disableDatabases;
         delete windowReference.EJS_disableLocalStorage;
+        delete windowReference.EJS_Buttons;
+        delete windowReference.EJS_onGameStart;
         delete windowReference.EJS_onSaveState;
         delete windowReference.EJS_onLoadState;
         delete windowReference.EJS_emulator;
