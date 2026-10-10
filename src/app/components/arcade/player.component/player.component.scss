@@ -16,7 +16,7 @@
     position: absolute;
     top: 1rem;
     left: 1rem;
-    z-index: 10;
+    z-index: 30;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -36,4 +36,75 @@
 #game {
     width: 100%;
     height: 100%;
+}
+
+.identity-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: rgba(5, 10, 12, 0.88);
+}
+
+.identity-form {
+    display: grid;
+    gap: 0.75rem;
+    width: min(100%, 24rem);
+    padding: 1.5rem;
+    border: 1px solid #435357;
+    border-top: 4px solid #70d6ad;
+    border-radius: 8px;
+    color: #f1f5f3;
+    background: #182124;
+}
+
+.identity-form h1 {
+    margin: 0 0 0.5rem;
+    font-size: 1.35rem;
+}
+
+.identity-form label {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.identity-form input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #64777a;
+    border-radius: 4px;
+    color: #fff;
+    background: #101719;
+}
+
+.identity-form input:focus-visible,
+.identity-form button:focus-visible {
+    outline: 2px solid #70d6ad;
+    outline-offset: 2px;
+}
+
+.identity-form button {
+    min-height: 2.75rem;
+    margin-top: 0.5rem;
+    border: 0;
+    border-radius: 4px;
+    color: #10221a;
+    background: #70d6ad;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.identity-form button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.identity-error {
+    margin: 0;
+    color: #ffaca0;
+    font-size: 0.9rem;
 }

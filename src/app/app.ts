@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { HeaderComponent } from './layout/header/header';
 import { FooterComponent } from './layout/footer/footer';
 import { SidebarComponent } from './layout/sidebar/sidebar';
@@ -24,7 +24,7 @@ import { LoadingService } from './services/loading.service';
 })
 export class App implements OnInit {
 
-    loading = false;
+    readonly loading = signal(false);
 
     constructor(
         private readonly loadingService: LoadingService
@@ -33,7 +33,7 @@ export class App implements OnInit {
 
     ngOnInit(): void {
         this.loadingService.loading$.subscribe(loading => {
-            this.loading = loading;
+            this.loading.set(loading);
         });
     }
 }
