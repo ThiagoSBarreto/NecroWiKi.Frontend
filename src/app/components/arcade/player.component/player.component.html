@@ -4,11 +4,11 @@
         <span>Voltar</span>
     </button>
 
-    @if (identityChecking) {
+    @if (identityChecking()) {
         <div class="identity-overlay" role="status">Verificando perfil...</div>
     }
 
-    @if (identityRequired) {
+    @if (identityRequired()) {
         <div class="identity-overlay">
             <form class="identity-form" (submit)="submitIdentity($event, user.value, password.value)">
                 <h1>Perfil de jogador</h1>
@@ -35,12 +35,12 @@
                     maxlength="128"
                     required>
 
-                @if (identityError) {
-                    <p class="identity-error" role="alert">{{ identityError }}</p>
+                @if (identityError()) {
+                    <p class="identity-error" role="alert">{{ identityError() }}</p>
                 }
 
-                <button type="submit" [disabled]="identityBusy">
-                    {{ identityBusy ? 'Aguarde...' : 'Continuar' }}
+                <button type="submit" [disabled]="identityBusy()">
+                    {{ identityBusy() ? 'Aguarde...' : 'Continuar' }}
                 </button>
             </form>
         </div>

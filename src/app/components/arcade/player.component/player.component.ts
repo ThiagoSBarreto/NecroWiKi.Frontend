@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SaveStateService } from '../../../services/save-state.service';
 
@@ -14,10 +14,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
     private pendingRom: string | null = null;
     private readonly cleanupEmulator = () => this.destroyEmulator();
 
-    public identityChecking = false;
-    public identityRequired = false;
-    public identityBusy = false;
-    public identityError = '';
+    public readonly identityChecking = signal(false);
+    public readonly identityRequired = signal(false);
+    public readonly identityBusy = signal(false);
+    public readonly identityError = signal('');
 
     constructor(
         private readonly route: ActivatedRoute,
@@ -57,24 +57,24 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
     public submitIdentity(event: Event, user: string, password: string): void {
         event.preventDefault();
-        if (this.identityBusy) {
+        if (this.identityBusy()) {
             return;
         }
 
-        this.identityBusy = true;
-        this.identityError = '';
+        this.identityBusy.set(true);
+        this.identityError.set('');
         this.saveStateService.resolveIdentity(user, password, this.saveStateService.getBrowserId()).subscribe({
             next: response => {
                 this.saveStateService.setBrowserId(response.uuid);
-                this.identityBusy = false;
-                this.identityRequired = false;
+                this.identityBusy.set(false);
+                this.identityRequired.set(false);
                 this.startPendingGame();
             },
             error: response => {
-                this.identityBusy = false;
-                this.identityError = response.status === 401
+                this.identityBusy.set(false);
+                this.identityError.set(response.status === 401
                     ? 'Usuário ou senha inválidos.'
-                    : 'Não foi possível salvar seus dados. Tente novamente.';
+                    : 'Não foi possível salvar seus dados. Tente novamente.');
             }
         });
     }
@@ -82,22 +82,22 @@ export class PlayerComponent implements OnInit, OnDestroy {
     private checkIdentity(): void {
         const browserId = this.saveStateService.getBrowserId();
         if (!browserId) {
-            this.identityRequired = true;
+            this.identityRequired.set(true);
             return;
         }
 
-        this.identityChecking = true;
+        this.identityChecking.set(true);
         this.saveStateService.checkIdentity(browserId).subscribe({
             next: () => {
-                this.identityChecking = false;
+                this.identityChecking.set(false);
                 this.startPendingGame();
             },
             error: response => {
-                this.identityChecking = false;
-                this.identityRequired = true;
-                this.identityError = response.status === 404
+                this.identityChecking.set(false);
+                this.identityRequired.set(true);
+                this.identityError.set(response.status === 404
                     ? ''
-                    : 'Não foi possível verificar sua identidade. Informe seus dados para continuar.';
+                    : 'Não foi possível verificar sua identidade. Informe seus dados para continuar.');
             }
         });
     }
