@@ -120,4 +120,4 @@
 
 </div>
 
-<app-upload-popup *ngIf="showUpload" [systemId]="systemId" (closed)="closeUpload()"></app-upload-popup>
+<app-upload-popup *ngIf="showUpload" [systemId]="systemId" (closed)="closeUpload($event)"></app-upload-popup>

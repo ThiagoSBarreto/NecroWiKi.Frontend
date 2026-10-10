@@ -1,3 +1,4 @@
+import { HttpEventType } from '@angular/common/http';
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
@@ -45,6 +46,10 @@ export class UploadComponent {
     romFiles: File[] = [];
     coverFile: File | null = null;
     coverPreview: string | null = null;
+    isUploading = false;
+    uploadProgress: number | null = null;
+    uploadedBytes = 0;
+    uploadTotalBytes: number | null = null;
 
     private readonly systemMap: Record<string, UploadSystemMeta> = {
         n64: {
@@ -155,6 +160,10 @@ export class UploadComponent {
     }
 
     confirm(): void {
+        if (this.isUploading) {
+            return;
+        }
+
         if (!this.romFiles.length) {
             this.toastService.error('Arquivo obrigatório', 'Selecione ao menos uma ROM para fazer o upload.');
             return;
@@ -177,10 +186,31 @@ export class UploadComponent {
             formData.append('coverFile', this.coverFile, this.coverFile.name);
         }
 
+        this.isUploading = true;
+        this.uploadProgress = null;
+        this.uploadedBytes = 0;
+        this.uploadTotalBytes = null;
+
         this.gameSystemService.uploadGame(this.systemId, formData).subscribe({
-            next: (response) => {
+            next: (event) => {
+                if (event.type === HttpEventType.UploadProgress) {
+                    this.uploadedBytes = event.loaded;
+                    this.uploadTotalBytes = event.total ?? null;
+                    this.uploadProgress = this.uploadTotalBytes === null
+                        ? null
+                        : Math.round((event.loaded / this.uploadTotalBytes) * 100);
+                    this.cdr.markForCheck();
+                    return;
+                }
+
+                if (event.type !== HttpEventType.Response) {
+                    return;
+                }
+
+                this.isUploading = false;
+                const response = event.body;
                 if (response?.message === 'success') {
-                    this.toastService.success('Sucesso', 'Jogo adicionado com sucesso! Recarregue a página para exibi-lo!');
+                    this.toastService.success('Sucesso', 'Jogo adicionado com sucesso!');
                     this.closePopup(true);
                     return;
                 }
@@ -188,10 +218,26 @@ export class UploadComponent {
                 this.toastService.error('Erro', response?.message ?? 'Não foi possível adicionar o jogo.');
             },
             error: (err) => {
+                this.isUploading = false;
+                this.cdr.markForCheck();
                 const message = err?.error?.message ?? err?.message ?? 'Não foi possível adicionar o jogo.';
                 this.toastService.error('Erro', message);
             }
         });
+    }
+
+    formatBytes(bytes: number): string {
+        const units = ['B', 'KB', 'MB', 'GB'];
+        let size = bytes;
+        let unitIndex = 0;
+
+        while (size >= 1024 && unitIndex < units.length - 1) {
+            size /= 1024;
+            unitIndex++;
+        }
+
+        const formattedSize = size.toFixed(unitIndex === 0 || size >= 10 ? 0 : 1);
+        return `${formattedSize} ${units[unitIndex]}`;
     }
 
     private readCoverFile(file: File): void {
@@ -207,6 +253,7 @@ export class UploadComponent {
 
     private closePopup(success = false): void {
         this.dialogVisible = false;
+        this.isUploading = false;
         this.romFiles = [];
         this.coverFile = null;
         this.coverPreview = null;

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -23,7 +23,11 @@ export class GameSystemService {
         return this.http.get<ArcadeGameModel[]>(`${environment.backendContext}gamesystem/${system}/roms`);
     }
 
-    uploadGame(system: string, payload: FormData): Observable<ApiMessageResponse> {
-        return this.http.post<ApiMessageResponse>(`${environment.backendContext}gamesystem/${system}/upload`, payload);
+    uploadGame(system: string, payload: FormData): Observable<HttpEvent<ApiMessageResponse>> {
+        return this.http.post<ApiMessageResponse>(
+            `${environment.backendContext}gamesystem/${system}/upload`,
+            payload,
+            { observe: 'events', reportProgress: true }
+        );
     }
 }
