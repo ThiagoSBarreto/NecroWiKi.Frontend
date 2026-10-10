@@ -1,5 +1,6 @@
-<p-dialog [(visible)]="dialogVisible" [modal]="true" [draggable]="true" [resizable]="false" [closeOnEscape]="true"
-    [closable]="true" [dismissableMask]="true" [style]="{ width: 'auto', height: 'auto' }" styleClass="upload-dialog"
+<p-dialog [(visible)]="dialogVisible" [modal]="true" [draggable]="!isUploading" [resizable]="false"
+    [closeOnEscape]="!isUploading" [closable]="!isUploading" [dismissableMask]="!isUploading"
+    [style]="{ width: 'auto', height: 'auto' }" styleClass="upload-dialog"
     (onHide)="handleDialogHide()">
 
     <ng-template pTemplate="header">
@@ -17,7 +18,7 @@
     <div class="upload-form-grid">
         <section class="form-section">
             <label class="drop-zone" for="romInput" (drop)="onRomFilesDropped($event)" (dragover)="onRomDragOver($event)">
-                <input id="romInput" type="file" multiple (change)="onRomFilesSelected($event)" />
+                <input id="romInput" type="file" multiple [disabled]="isUploading" (change)="onRomFilesSelected($event)" />
 
                 <span class="drop-zone__content">
                     <span class="drop-zone__icon">
@@ -41,7 +42,8 @@
 
         <section class="form-section">
             <label class="cover-drop-zone" for="coverInput" (drop)="onCoverDropped($event)" (dragover)="onCoverDragOver($event)">
-                <input id="coverInput" type="file" accept="image/png,.png" (change)="onCoverSelected($event)" />
+                <input id="coverInput" type="file" accept="image/png,.png" [disabled]="isUploading"
+                    (change)="onCoverSelected($event)" />
 
                 <span class="cover-preview" *ngIf="coverPreview; else emptyCover">
                     <img [src]="coverPreview" alt="Pré-visualização da capa" />
@@ -62,16 +64,36 @@
             </div>
 
             <input pInputText type="text" class="game-name-input" [(ngModel)]="gameName"
-                placeholder="Informe o nome do jogo" />
+                placeholder="Informe o nome do jogo" [disabled]="isUploading" />
         </section>
     </div>
 
+    <section class="upload-progress" *ngIf="isUploading" role="status" aria-live="polite">
+        <div class="upload-progress__heading">
+            <strong>{{ uploadProgress === 100 ? 'Finalizando no servidor' : uploadProgress === null ? 'Preparando envio' : 'Enviando arquivos' }}</strong>
+            <span *ngIf="uploadProgress !== null">{{ uploadProgress }}%</span>
+        </div>
+
+        <progress *ngIf="uploadProgress !== null; else indeterminateProgress" [value]="uploadProgress" max="100"
+            aria-label="Progresso do upload"></progress>
+        <ng-template #indeterminateProgress>
+            <progress max="100" aria-label="Progresso do upload"></progress>
+        </ng-template>
+
+        <small>
+            {{ formatBytes(uploadedBytes) }} enviados
+            <ng-container *ngIf="uploadTotalBytes !== null"> de {{ formatBytes(uploadTotalBytes) }}</ng-container>
+        </small>
+    </section>
+
     <ng-template pTemplate="footer">
         <div class="upload-modal__footer">
-            <p-button label="Cancelar" icon="pi pi-times" severity="secondary" (onClick)="cancel()">
+            <p-button label="Cancelar" icon="pi pi-times" severity="secondary" [disabled]="isUploading"
+                (onClick)="cancel()">
             </p-button>
 
-            <p-button label="Confirmar" icon="pi pi-check" (onClick)="confirm()">
+            <p-button [label]="isUploading ? 'Enviando...' : 'Confirmar'" icon="pi pi-check"
+                [disabled]="isUploading" (onClick)="confirm()">
             </p-button>
         </div>
     </ng-template>
