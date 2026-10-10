@@ -129,6 +129,33 @@ export class PlayerComponent implements OnInit, OnDestroy {
         filePicker.click();
     }
 
+    private addManualSaveStateButton(windowReference: any): void {
+        const loadStateButton = windowReference.EJS_emulator?.elements?.bottomBar?.loadState?.[0];
+        if (!loadStateButton || document.getElementById('necrowiki-manual-load-state')) {
+            return;
+        }
+
+        const button = document.createElement('button');
+        button.id = 'necrowiki-manual-load-state';
+        button.type = 'button';
+        button.classList.add('ejs_menu_button');
+        button.title = 'Carregar save state de um arquivo';
+
+        const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        icon.setAttribute('viewBox', '0 0 512 512');
+        icon.setAttribute('role', 'presentation');
+        icon.setAttribute('focusable', 'false');
+        icon.innerHTML = '<path fill="currentColor" d="M256 32 128 160h80v144h96V160h80L256 32zM96 336h320v96H96v-96z"/>';
+
+        const label = document.createElement('span');
+        label.classList.add('ejs_menu_text');
+        label.textContent = 'Carregar arquivo';
+
+        button.append(icon, label);
+        button.addEventListener('click', () => this.openManualSaveStatePicker(windowReference));
+        loadStateButton.after(button);
+    }
+
     private initializeEmulator(core: string, rom: string): void {
         const romFilename: string = decodeURIComponent(
             rom.split('/').pop() ?? ''
@@ -150,20 +177,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
         windowReference.EJS_threads = false;
         windowReference.EJS_disableDatabases = true;
         windowReference.EJS_disableLocalStorage = true;
-        windowReference.EJS_Buttons = {
-            loadStateFile: {
-                displayName: 'Carregar arquivo',
-                icon: '<svg viewBox="0 0 512 512"><path id="necrowiki-load-state-file-icon" fill="currentColor" d="M256 32 128 160h80v144h96V160h80L256 32zM96 336h320v96H96v-96z"/></svg>',
-                callback: () => this.openManualSaveStatePicker(windowReference)
-            }
-        };
-        windowReference.EJS_onGameStart = () => {
-            const customButton = document.getElementById('necrowiki-load-state-file-icon')?.closest('button');
-            const loadStateButton = windowReference.EJS_emulator?.elements?.bottomBar?.loadState?.[0];
-            if (customButton && loadStateButton) {
-                loadStateButton.after(customButton);
-            }
-        };
+        windowReference.EJS_onGameStart = () => this.addManualSaveStateButton(windowReference);
         const saveKey = `${this.systemId}:${romFilename.toLowerCase()}`;
         windowReference.EJS_onSaveState = (data: { state: Uint8Array }) => {
             this.saveStateService.save(saveKey, data.state).subscribe({
@@ -268,7 +282,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
         delete windowReference.EJS_threads;
         delete windowReference.EJS_disableDatabases;
         delete windowReference.EJS_disableLocalStorage;
-        delete windowReference.EJS_Buttons;
         delete windowReference.EJS_onGameStart;
         delete windowReference.EJS_onSaveState;
         delete windowReference.EJS_onLoadState;
