@@ -86,6 +86,16 @@
                         (onClick)="openGame(game); $event.stopPropagation()">
                     </p-button>
 
+                    <p-button label="Download" icon="pi pi-download" severity="contrast" [rounded]="true"
+                        pTooltip="Baixar ROM" tooltipPosition="top"
+                        (onClick)="downloadGame(game); $event.stopPropagation()">
+                    </p-button>
+
+                    <p-button icon="pi pi-ellipsis-h" severity="contrast" [rounded]="true" [text]="true"
+                        pTooltip="Editar jogo" tooltipPosition="top" ariaLabel="Editar jogo"
+                        (onClick)="openEdit(game); $event.stopPropagation()">
+                    </p-button>
+
                 </div>
 
             </div>
@@ -120,4 +130,5 @@
 
 </div>
 
-<app-upload-popup *ngIf="showUpload" [systemId]="systemId" (closed)="closeUpload($event)"></app-upload-popup>
+<app-upload-popup *ngIf="showUpload" [systemId]="systemId" [game]="selectedGameForEdit"
+    (closed)="closeUpload($event)"></app-upload-popup>

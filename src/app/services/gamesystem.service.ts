@@ -30,4 +30,16 @@ export class GameSystemService {
             { observe: 'events', reportProgress: true }
         );
     }
+
+    updateGame(system: string, currentName: string, payload: FormData): Observable<HttpEvent<ApiMessageResponse>> {
+        return this.http.put<ApiMessageResponse>(
+            `${environment.backendContext}gamesystem/${system}/roms/${encodeURIComponent(currentName)}`,
+            payload,
+            { observe: 'events', reportProgress: true }
+        );
+    }
+
+    getRomUrl(romPath: string): string {
+        return new URL(romPath, environment.backendContext).toString();
+    }
 }

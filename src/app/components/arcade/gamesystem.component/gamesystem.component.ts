@@ -48,6 +48,7 @@ interface ArcadeSystemMeta {
 export class GamesystemComponent implements OnInit {
 
     showUpload = false;
+    selectedGameForEdit: ArcadeGameModel | null = null;
 
     games: ArcadeGameModel[] = [];
     filteredGames: ArcadeGameModel[] = [];
@@ -178,11 +179,28 @@ export class GamesystemComponent implements OnInit {
     }
 
     openUpload(): void {
+        this.selectedGameForEdit = null;
         this.showUpload = true;
+    }
+
+    openEdit(game: ArcadeGameModel): void {
+        this.selectedGameForEdit = game;
+        this.showUpload = true;
+    }
+
+    downloadGame(game: ArcadeGameModel): void {
+        const romUrl = this.gameSystemService.getRomUrl(game.romPath);
+        const link = document.createElement('a');
+        link.href = romUrl;
+        link.download = decodeURIComponent(new URL(romUrl).pathname.split('/').pop() ?? game.name);
+        document.body.append(link);
+        link.click();
+        link.remove();
     }
 
     closeUpload(success = false): void {
         this.showUpload = false;
+        this.selectedGameForEdit = null;
         this.cdr.markForCheck();
 
         if (success) {
