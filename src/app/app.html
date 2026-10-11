@@ -15,12 +15,17 @@
     </header>
 
     <!-- ÁREA CENTRAL -->
-    <div class="app-body">
+    <div class="app-body" [class.sidebar-closed]="!sidebarState.isOpen()">
 
         <!-- SIDEBAR -->
         <aside class="app-sidebar">
             <app-sidebar></app-sidebar>
         </aside>
+
+        @if (sidebarState.isOpen()) {
+            <button class="sidebar-backdrop" type="button" aria-label="Fechar menu lateral"
+                (click)="sidebarState.close()"></button>
+        }
 
         <!-- CONTEÚDO -->
         <main class="app-content">

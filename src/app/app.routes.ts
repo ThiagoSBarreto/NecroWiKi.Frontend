@@ -11,6 +11,11 @@ export const routes: Routes = [
     },
     {
         path: 'home',
+        loadComponent: () => import('./home-portal/home-portal').then(m => m.HomePortalComponent),
+        canActivate: [accountGuard]
+    },
+    {
+        path: 'home-classic',
         component: HomeComponent,
         canActivate: [accountGuard]
     },

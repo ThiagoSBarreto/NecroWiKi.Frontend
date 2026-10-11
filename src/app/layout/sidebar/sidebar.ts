@@ -7,6 +7,7 @@ import {
 import { WIKI_CONFIG } from '../../config/wiki.config';
 import { DownloadService } from '../../services/download.service';
 import { AuthService } from '../../services/auth.service';
+import { SidebarStateService } from '../../services/sidebar-state.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -23,6 +24,7 @@ export class SidebarComponent {
     readonly wikiItems = WIKI_CONFIG;
     readonly downloadService = inject(DownloadService);
     readonly authService = inject(AuthService);
+    readonly sidebarState = inject(SidebarStateService);
 
     get visibleWikiItems() {
         if (!this.authService.isGuest()) {

@@ -24,6 +24,30 @@
     align-items: center;
 }
 
+.sidebar-toggle {
+    display: grid;
+    width: 2.35rem;
+    height: 2.35rem;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 0.3rem;
+    background: transparent;
+    color: var(--necro-text-muted) !important;
+    cursor: pointer;
+    font-size: 1.05rem;
+}
+
+.sidebar-toggle:hover,
+.sidebar-toggle:focus-visible {
+    border-color: var(--necro-border-hover);
+    color: var(--necro-primary) !important;
+}
+
+.sidebar-toggle:focus-visible {
+    outline: 2px solid var(--necro-primary);
+    outline-offset: 2px;
+}
+
 .header-right {
     display: flex;
     justify-content: flex-end;

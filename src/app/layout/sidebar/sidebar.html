@@ -2,7 +2,7 @@
     @if (!authService.isGuest()) {
     <section class="sidebar-section home">
         <h3>
-            <a class="sidebar-link" routerLink="/">
+            <a class="sidebar-link" routerLink="/" (click)="sidebarState.closeOnMobile()">
                 <i class="pi pi-home"></i>
                 <span>
                     Home
@@ -62,7 +62,7 @@
         } @else {
 
         <a class="sidebar-link" [routerLink]="link.route" routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }">
+            [routerLinkActiveOptions]="{ exact: true }" (click)="sidebarState.closeOnMobile()">
 
             @if (link.image) {
             <img [src]="link.image" [alt]="link.label" />
