@@ -16,7 +16,7 @@
     border-bottom: 1px solid var(--necro-border);
 
     box-shadow:
-        0 0 10px rgba(0, 255, 157, 0.08);
+        0 0 10px rgba(181, 108, 255, 0.12);
 }
 
 .header-left {
@@ -24,13 +24,61 @@
     align-items: center;
 }
 
+.sidebar-toggle {
+    display: grid;
+    width: 2.35rem;
+    height: 2.35rem;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 0.3rem;
+    background: transparent;
+    color: var(--necro-text-muted) !important;
+    cursor: pointer;
+    font-size: 1.05rem;
+}
+
+.sidebar-toggle:hover,
+.sidebar-toggle:focus-visible {
+    border-color: var(--necro-border-hover);
+    color: var(--necro-primary) !important;
+}
+
+.sidebar-toggle:focus-visible {
+    outline: 2px solid var(--necro-primary);
+    outline-offset: 2px;
+}
+
 .header-right {
     display: flex;
     justify-content: flex-end;
     align-items: center;
 
-    gap: 2px;
+    gap: 0.7rem;
 }
+
+.session-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--necro-text-muted);
+    font-size: 0.78rem;
+}
+
+.session-label i { color: var(--necro-primary); }
+
+.session-button {
+    padding: 0.45rem 0.65rem;
+    border: 1px solid var(--necro-border-hover);
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--necro-text);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.75rem;
+    text-decoration: none;
+}
+
+.session-button:hover { border-color: var(--necro-primary); color: var(--necro-primary); }
 
 .header-title {
     color: var(--necro-primary);
@@ -42,7 +90,7 @@
     text-align: center;
 
     text-shadow:
-        0 0 8px rgba(0, 255, 157, 0.25);
+        0 0 8px rgba(181, 108, 255, 0.28);
 }
 
 button {

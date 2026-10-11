@@ -18,10 +18,10 @@
         </div>
 
         <div class="header-actions">
-
+            @if (authService.isAdmin()) {
             <p-button label="Adicionar jogo" icon="pi pi-plus" (onClick)="openUpload()">
             </p-button>
-
+            }
         </div>
 
     </div>
@@ -91,10 +91,12 @@
                         (onClick)="downloadGame(game); $event.stopPropagation()">
                     </p-button>
 
+                    @if (authService.isAdmin()) {
                     <p-button icon="pi pi-ellipsis-h" severity="contrast" [rounded]="true" [text]="true"
                         pTooltip="Editar jogo" tooltipPosition="top" ariaLabel="Editar jogo"
                         (onClick)="openEdit(game); $event.stopPropagation()">
                     </p-button>
+                    }
 
                 </div>
 

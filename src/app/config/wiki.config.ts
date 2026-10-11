@@ -59,6 +59,12 @@ export const WIKI_CONFIG: WikiItem[] = [
                 image: '/images/qbittorrent.png',
                 severity: 'success',
                 external: true
+            },
+            {
+                label: 'Tutoriais',
+                route: '/tutorials',
+                icon: 'pi pi-book',
+                severity: 'help'
             }
         ]
     },
@@ -136,12 +142,6 @@ export const WIKI_CONFIG: WikiItem[] = [
                 icon: 'pi pi-download',
                 severity: 'warn',
                 downloadGameName: 'World_of_Warcraft_2.4.3_TBC'
-            },
-            {
-                label: 'Tutoriais',
-                route: '/tutorials/wow',
-                icon: 'pi pi-book',
-                severity: 'warn'
             }
         ]
     },
@@ -166,12 +166,6 @@ export const WIKI_CONFIG: WikiItem[] = [
                 icon: 'pi pi-download',
                 severity: 'info',
                 downloadGameName: 'Ragnarok_2012_Pre-Renewal'
-            },
-            {
-                label: 'Tutoriais',
-                route: '/tutorials/ragnarok',
-                icon: 'pi pi-book',
-                severity: 'info'
             }
         ]
     },
@@ -190,12 +184,6 @@ export const WIKI_CONFIG: WikiItem[] = [
                 icon: 'pi pi-download',
                 severity: 'info',
                 downloadGameName: 'Warcraft_III'
-            },
-            {
-                label: 'Tutoriais',
-                route: '/diablo2/tutorials',
-                icon: 'pi pi-book',
-                severity: 'info'
             }
         ]
     },
@@ -221,12 +209,6 @@ export const WIKI_CONFIG: WikiItem[] = [
                 icon: 'pi pi-download',
                 severity: 'danger',
                 downloadGameName: 'Diablo_II_PlugY'
-            },
-            {
-                label: 'Tutoriais',
-                route: '/diablo2/tutorials',
-                icon: 'pi pi-book',
-                severity: 'danger'
             }
         ]
     },
@@ -262,12 +244,6 @@ export const WIKI_CONFIG: WikiItem[] = [
                 route: '/arcade/psx',
                 image: '/images/ps1.png',
                 severity: 'danger'
-            },
-            {
-                label: 'Tutoriais',
-                route: '/arcade/tutorials',
-                icon: 'pi pi-book',
-                severity: 'help'
             }
         ]
     },

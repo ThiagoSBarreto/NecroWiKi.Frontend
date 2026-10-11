@@ -1,0 +1,54 @@
+<main class="account-page">
+    <section class="account-panel" aria-labelledby="account-title">
+        <a class="account-brand" routerLink="/account" aria-label="NecroWiKi">
+            <span class="account-brand__mark">N</span>
+            <span>NecroWiKi</span>
+        </a>
+
+        <div class="account-tabs" role="tablist" aria-label="Acesso à conta">
+            <button type="button" role="tab" [attr.aria-selected]="!registering()"
+                [class.active]="!registering()" (click)="setMode(false)">Entrar</button>
+            <button type="button" role="tab" [attr.aria-selected]="registering()"
+                [class.active]="registering()" (click)="setMode(true)">Criar conta</button>
+        </div>
+
+        <form class="account-form" (ngSubmit)="submit()">
+            <label>
+                <span>Usuário</span>
+                <input name="userName" [(ngModel)]="userName" type="text" minlength="3" maxlength="32"
+                    autocomplete="username" required [disabled]="busy()" />
+            </label>
+
+            <label>
+                <span>Senha</span>
+                <input name="password" [(ngModel)]="password" type="password" minlength="10" maxlength="128"
+                    [attr.autocomplete]="registering() ? 'new-password' : 'current-password'"
+                    required [disabled]="busy()" />
+            </label>
+
+            @if (registering()) {
+                <label>
+                    <span>Confirme a senha</span>
+                    <input name="confirmPassword" [(ngModel)]="confirmPassword" type="password"
+                        minlength="10" maxlength="128" autocomplete="new-password" required [disabled]="busy()" />
+                </label>
+            }
+
+            @if (errorMessage()) {
+                <p class="account-error" role="alert">{{ errorMessage() }}</p>
+            }
+
+            <p-button [label]="busy() ? 'Aguarde...' : registering() ? 'Registrar' : 'Entrar'"
+                icon="pi pi-arrow-right" iconPos="right" type="submit" [disabled]="busy()"></p-button>
+        </form>
+    </section>
+
+    <aside class="account-art" aria-hidden="true">
+        <div class="account-art__grid"></div>
+        <div class="account-art__copy">
+            <i>NecroWiKi</i>
+        </div>
+        <div class="account-art__pixel account-art__pixel--one"></div>
+        <div class="account-art__pixel account-art__pixel--two"></div>
+    </aside>
+</main>

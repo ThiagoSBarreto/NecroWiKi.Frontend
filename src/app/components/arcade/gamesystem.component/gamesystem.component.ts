@@ -2,6 +2,7 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    inject,
     OnInit
 } from '@angular/core';
 
@@ -19,6 +20,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { GameSystemService } from '../../../services/gamesystem.service';
 import { ArcadeGameModel } from '../../../models/arcade.models/arcade.game.model';import { UploadComponent } from '../upload.component/upload.component';
+import { AuthService } from '../../../services/auth.service';
 interface ArcadeSystemMeta {
     id: string;
     label: string;
@@ -46,6 +48,7 @@ interface ArcadeSystemMeta {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GamesystemComponent implements OnInit {
+    readonly authService = inject(AuthService);
 
     showUpload = false;
     selectedGameForEdit: ArcadeGameModel | null = null;
@@ -179,11 +182,19 @@ export class GamesystemComponent implements OnInit {
     }
 
     openUpload(): void {
+        if (!this.authService.isAdmin()) {
+            return;
+        }
+
         this.selectedGameForEdit = null;
         this.showUpload = true;
     }
 
     openEdit(game: ArcadeGameModel): void {
+        if (!this.authService.isAdmin()) {
+            return;
+        }
+
         this.selectedGameForEdit = game;
         this.showUpload = true;
     }

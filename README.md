@@ -7,6 +7,8 @@ The frontend acts as the main portal for the NecroWiKi experience, connecting:
 - a home page with categories and external links;
 - account registration flows for games and communities;
 - an arcade game catalog organized by platform;
+- a tutorial blog with Markdown articles, image uploads, and native video playback;
+- portal accounts with Admin/User roles and an arcade-only Guest mode;
 - ROM playback through a web-based emulator library using local `EmulatorJS` assets;
 - integrations with external services and backend APIs.
 
@@ -18,8 +20,11 @@ The experience is organized around these main areas:
 
 - `home`: main portal page;
 - `register/:type`: community/game registration flows;
+- `tutorials`: tutorial feed, with category and article routes;
 - `arcade/:system`: ROM library by arcade system;
 - `arcade/:system/play`: game playback screen using the app player.
+- `account`: login, registration, or Guest entry;
+- `admin`: Admin-only portal account management.
 
 ## Main features
 
@@ -47,6 +52,12 @@ The gamesystem page includes:
 - ROM upload;
 - opening the player view with system and ROM parameters.
 
+### Tutorials
+
+The tutorial area lists articles by game category, renders uploaded Markdown with relative image links, and includes an optional native video player for direct MP4, WebM, or OGG URLs. Publishing stores the Markdown and images in the backend's persistent tutorial directory.
+
+Signed-in users can search tutorials and manage their own articles; Admins can manage all tutorials. Guest sessions can access the arcade only and do not synchronize save states.
+
 ### EmulatorJS
 
 The `public/emulatorjs` directory contains the local web emulator infrastructure used to run ROMs directly in the browser.
@@ -68,6 +79,7 @@ The `public/emulatorjs` directory contains the local web emulator infrastructure
 src/
   app/
     components/       - UI components and arcade/register flows
+    tutorials/        - tutorial feed, Markdown articles, and publishing form
     config/           - wiki and registration configuration
     home/             - homepage
     layout/           - header, sidebar, shell, footer

@@ -1,0 +1,178 @@
+<section class="tutorial-page">
+    <header class="tutorial-heading">
+        <div class="tutorial-heading__copy">
+            <p class="tutorial-eyebrow">NECROWIKI / CONHECIMENTO</p>
+            <h1>{{ isArticle() ? 'Caderno de campo' : 'Tutoriais' }}</h1>
+            <p class="tutorial-heading__description">
+                {{ isArticle() ? 'Guias práticos para explorar cada mundo.' : 'Guias práticos da comunidade NecroWiKi.' }}
+            </p>
+        </div>
+
+        @if (!isArticle()) {
+            <p-button label="Novo tutorial" icon="pi pi-plus" (onClick)="openCreateDialog()"></p-button>
+        } @else {
+            <p-button label="Todos os tutoriais" icon="pi pi-arrow-left" severity="secondary" [outlined]="true"
+                (onClick)="backToList()"></p-button>
+        }
+    </header>
+
+    @if (!isArticle()) {
+        <nav class="category-nav" aria-label="Filtrar tutoriais por categoria">
+            <button type="button" [class.active]="currentCategory() === null" (click)="selectCategory(null)">
+                Todos
+            </button>
+            @for (item of categories; track item.value) {
+                <button type="button" [class.active]="currentCategory() === item.value"
+                    [attr.data-category]="item.color" (click)="selectCategory(item.value)">
+                    {{ item.label }}
+                </button>
+            }
+        </nav>
+        <label class="tutorial-search">
+            <i class="pi pi-search" aria-hidden="true"></i>
+            <input type="search" [ngModel]="searchTerm" (ngModelChange)="onSearchChange($event)"
+                placeholder="Buscar tutoriais por texto" aria-label="Buscar tutoriais por texto" />
+        </label>
+    }
+
+    @if (loading()) {
+        <div class="tutorial-state" role="status">
+            <span class="loading-mark" aria-hidden="true"></span>
+            <span>Carregando tutoriais</span>
+        </div>
+    } @else if (errorMessage()) {
+        <div class="tutorial-state tutorial-state--error" role="alert">
+            <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+            <p>{{ errorMessage() }}</p>
+        </div>
+    } @else if (isArticle() && tutorial(); as article) {
+        <article class="tutorial-article">
+            <div class="article-meta">
+                <span class="category-label" [attr.data-category]="categoryColor(article.category)">
+                    {{ categoryLabel(article.category) }}
+                </span>
+                <time [attr.datetime]="article.updatedAt">{{ article.updatedAt | date: 'longDate' }}</time>
+                <span>por {{ article.ownerName }}</span>
+            </div>
+
+            <h2 class="article-title">{{ article.title }}</h2>
+            <p class="article-summary">{{ article.summary }}</p>
+
+            @if (canManage(article)) {
+                <div class="article-actions">
+                    <p-button label="Editar" icon="pi pi-pencil" severity="secondary" [outlined]="true"
+                        (onClick)="openEditDialog(article)"></p-button>
+                    <p-button label="Excluir" icon="pi pi-trash" severity="danger" [outlined]="true"
+                        (onClick)="deleteTutorial(article)"></p-button>
+                </div>
+            }
+
+            @if (article.videoUrl) {
+                <div class="article-video">
+                    <video [src]="article.videoUrl" controls preload="metadata" playsinline>
+                        Seu navegador não suporta reprodução de vídeo.
+                    </video>
+                </div>
+            }
+
+            <div class="article-prose" [innerHTML]="renderedMarkdown()"></div>
+        </article>
+    } @else if (tutorials().length > 0) {
+        <div class="tutorial-list-heading">
+            <span>{{ tutorials().length }} {{ tutorials().length === 1 ? 'guia' : 'guias' }}</span>
+            @if (currentCategory()) {
+                <span class="tutorial-list-heading__category">{{ categoryLabel(currentCategory()!) }}</span>
+            }
+        </div>
+
+        <div class="tutorial-grid">
+            @for (item of tutorials(); track item.slug) {
+                <button type="button" class="tutorial-card" (click)="openTutorial(item)">
+                    <span class="tutorial-card__topline">
+                        <span class="category-label" [attr.data-category]="categoryColor(item.category)">
+                            {{ categoryLabel(item.category) }}
+                        </span>
+                        @if (item.videoUrl) {
+                            <i class="pi pi-video" aria-label="Inclui vídeo"></i>
+                        }
+                    </span>
+                    <span class="tutorial-card__title">{{ item.title }}</span>
+                    <span class="tutorial-card__summary">{{ item.summary }}</span>
+                    <span class="tutorial-card__author">por {{ item.ownerName }}</span>
+                    <span class="tutorial-card__footer">
+                        <time [attr.datetime]="item.updatedAt">{{ item.updatedAt | date: 'mediumDate' }}</time>
+                        <span class="tutorial-card__read">Ler guia <i class="pi pi-arrow-up-right" aria-hidden="true"></i></span>
+                    </span>
+                </button>
+            }
+        </div>
+    } @else {
+        <div class="tutorial-empty">
+            <i class="pi pi-book" aria-hidden="true"></i>
+            <h2>Nenhum tutorial por aqui ainda</h2>
+            <p>Quando um novo guia for publicado, ele aparecerá nesta lista.</p>
+            <p-button label="Adicionar tutorial" icon="pi pi-plus" (onClick)="openCreateDialog()"></p-button>
+        </div>
+    }
+</section>
+
+<p-dialog [header]="editingTutorial() ? 'Editar tutorial' : 'Publicar tutorial'" [(visible)]="showCreateDialog" [modal]="true" [draggable]="false"
+    [resizable]="false" [closable]="!isPublishing()" [closeOnEscape]="!isPublishing()"
+    [dismissableMask]="!isPublishing()" [style]="{ width: 'min(680px, 94vw)' }"
+    styleClass="tutorial-dialog" (onHide)="resetForm()">
+    <form class="tutorial-form" (ngSubmit)="publish()">
+        <label class="form-field">
+            <span>Título</span>
+            <input type="text" name="title" [(ngModel)]="title" maxlength="120" required
+                placeholder="Ex.: Instalação do cliente" [disabled]="isPublishing()" />
+        </label>
+
+        <label class="form-field">
+            <span>Categoria</span>
+            <select name="category" [(ngModel)]="category" [disabled]="isPublishing()">
+                @for (item of categories; track item.value) {
+                    <option [value]="item.value">{{ item.label }}</option>
+                }
+            </select>
+        </label>
+
+        <label class="form-field">
+            <span>Resumo</span>
+            <textarea name="summary" [(ngModel)]="summary" maxlength="360" rows="3" required
+                placeholder="Uma frase para apresentar este guia" [disabled]="isPublishing()"></textarea>
+        </label>
+
+        <label class="form-field">
+            <span>Arquivo Markdown</span>
+            <input type="file" accept=".md,text/markdown" [required]="!editingTutorial()" [disabled]="isPublishing()"
+                (change)="onMarkdownSelected($event)" />
+            @if (markdownFile) {
+                <small class="selected-file"><i class="pi pi-file"></i> {{ markdownFile.name }}</small>
+            }
+        </label>
+
+        <label class="form-field">
+            <span>Imagens</span>
+            <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" multiple
+                [disabled]="isPublishing()" (change)="onImagesSelected($event)" />
+            <small>Referencie no Markdown com `![descrição](images/nome-do-arquivo.png)`.</small>
+            @if (imageFiles.length > 0) {
+                <span class="selected-file">{{ imageFiles.length }} imagens selecionadas</span>
+            }
+        </label>
+
+        <label class="form-field">
+            <span>Vídeo (opcional)</span>
+            <input type="url" name="videoUrl" [(ngModel)]="videoUrl" placeholder="https://servidor/video.mp4"
+                [disabled]="isPublishing()" />
+            <small>URL direta de vídeo MP4, WebM ou OGG.</small>
+        </label>
+
+        <div class="tutorial-form__actions">
+            <p-button label="Cancelar" severity="secondary" [outlined]="true" type="button"
+                [disabled]="isPublishing()" (onClick)="closeCreateDialog()"></p-button>
+            <p-button [label]="isPublishing() ? 'Salvando...' : editingTutorial() ? 'Salvar alterações' : 'Publicar'" icon="pi pi-send" type="submit"
+                [disabled]="isPublishing()"></p-button>
+        </div>
+    </form>
+</p-dialog>

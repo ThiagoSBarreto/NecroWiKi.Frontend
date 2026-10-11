@@ -1,11 +1,8 @@
 <aside class="sidebar">
-    <section class="sidebar-section" class="home">
+    @if (!authService.isGuest()) {
+    <section class="sidebar-section home">
         <h3>
-            <span>
-                NecroHome
-            </span>
-
-            <a class="sidebar-link" routerLink="/">
+            <a class="sidebar-link" routerLink="/" (click)="sidebarState.closeOnMobile()">
                 <i class="pi pi-home"></i>
                 <span>
                     Home
@@ -13,8 +10,9 @@
             </a>
         </h3>
     </section>
+    }
 
-    @for (game of wikiItems; track game.id) {
+    @for (game of visibleWikiItems; track game.id) {
     <section class="sidebar-section" [class]="game.theme">
         <h3>
             <img [src]="game.image" [alt]="game.title" />
@@ -64,7 +62,7 @@
         } @else {
 
         <a class="sidebar-link" [routerLink]="link.route" routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }">
+            [routerLinkActiveOptions]="{ exact: true }" (click)="sidebarState.closeOnMobile()">
 
             @if (link.image) {
             <img [src]="link.image" [alt]="link.label" />

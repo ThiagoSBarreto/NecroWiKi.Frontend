@@ -4,47 +4,5 @@
         <span>Voltar</span>
     </button>
 
-    @if (identityChecking()) {
-        <div class="identity-overlay" role="status">Verificando perfil...</div>
-    }
-
-    @if (identityRequired()) {
-        <div class="identity-overlay">
-            <form class="identity-form" (submit)="submitIdentity($event, user.value, password.value)">
-                <h1>Perfil de jogador</h1>
-
-                <label for="save-user">Nome</label>
-                <input
-                    #user
-                    id="save-user"
-                    name="user"
-                    type="text"
-                    autocomplete="username"
-                    minlength="3"
-                    maxlength="64"
-                    required>
-
-                <label for="save-password">Senha</label>
-                <input
-                    #password
-                    id="save-password"
-                    name="password"
-                    type="password"
-                    autocomplete="current-password"
-                    minlength="8"
-                    maxlength="128"
-                    required>
-
-                @if (identityError()) {
-                    <p class="identity-error" role="alert">{{ identityError() }}</p>
-                }
-
-                <button type="submit" [disabled]="identityBusy()">
-                    {{ identityBusy() ? 'Aguarde...' : 'Continuar' }}
-                </button>
-            </form>
-        </div>
-    }
-
     <div id="game"></div>
 </div>

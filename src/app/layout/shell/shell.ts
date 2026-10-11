@@ -16,5 +16,4 @@ import { FooterComponent } from '../footer/footer';
   templateUrl: './shell.html',
   styleUrl: './shell.scss'
 })
-export class ShellComponent {
-}
+export class ShellComponent {}

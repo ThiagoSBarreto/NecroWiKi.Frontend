@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 import { SaveStateService } from '../../../services/save-state.service';
 
 @Component({
@@ -14,14 +15,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
     private pendingRom: string | null = null;
     private readonly cleanupEmulator = () => this.destroyEmulator();
 
-    public readonly identityChecking = signal(false);
-    public readonly identityRequired = signal(false);
-    public readonly identityBusy = signal(false);
-    public readonly identityError = signal('');
-
     constructor(
         private readonly route: ActivatedRoute,
         private readonly router: Router,
+        private readonly authService: AuthService,
         private readonly saveStateService: SaveStateService
     ) {
         window.addEventListener('beforeunload', this.cleanupEmulator);
@@ -42,7 +39,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
             this.pendingCore = core;
             this.pendingRom = rom;
-            this.checkIdentity();
+            this.startPendingGame();
         });
     }
 
@@ -55,53 +52,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
         this.router.navigate(['/arcade', this.systemId]);
     }
 
-    public submitIdentity(event: Event, user: string, password: string): void {
-        event.preventDefault();
-        if (this.identityBusy()) {
-            return;
-        }
-
-        this.identityBusy.set(true);
-        this.identityError.set('');
-        this.saveStateService.resolveIdentity(user, password, this.saveStateService.getBrowserId()).subscribe({
-            next: response => {
-                this.saveStateService.setBrowserId(response.uuid);
-                this.identityBusy.set(false);
-                this.identityRequired.set(false);
-                this.startPendingGame();
-            },
-            error: response => {
-                this.identityBusy.set(false);
-                this.identityError.set(response.status === 401
-                    ? 'Usuário ou senha inválidos.'
-                    : 'Não foi possível salvar seus dados. Tente novamente.');
-            }
-        });
-    }
-
-    private checkIdentity(): void {
-        const browserId = this.saveStateService.getBrowserId();
-        if (!browserId) {
-            this.identityRequired.set(true);
-            return;
-        }
-
-        this.identityChecking.set(true);
-        this.saveStateService.checkIdentity(browserId).subscribe({
-            next: () => {
-                this.identityChecking.set(false);
-                this.startPendingGame();
-            },
-            error: response => {
-                this.identityChecking.set(false);
-                this.identityRequired.set(true);
-                this.identityError.set(response.status === 404
-                    ? ''
-                    : 'Não foi possível verificar sua identidade. Informe seus dados para continuar.');
-            }
-        });
-    }
-
     private startPendingGame(): void {
         if (this.pendingCore && this.pendingRom) {
             this.initializeEmulator(this.pendingCore, this.pendingRom);
@@ -109,6 +59,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
     }
 
     private openManualSaveStatePicker(windowReference: any, gameKey: string, gameName: string): void {
+        const accountId = this.authService.account()?.id;
+        if (!accountId) {
+            return;
+        }
+
         const filePicker = document.createElement('input');
         filePicker.type = 'file';
         filePicker.accept = '.state,application/octet-stream';
@@ -122,7 +77,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
             try {
                 const state = new Uint8Array(await file.arrayBuffer());
                 gameManager.loadState(state);
-                this.saveStateService.save(gameKey, state).subscribe({
+                this.saveStateService.save(accountId, gameKey, state).subscribe({
                     next: () => this.showEmulatorMessage(`Save state de ${gameName} atualizado no servidor.`),
                     error: () => this.showEmulatorMessage('Estado carregado, mas não foi possível atualizar o save no servidor.')
                 });
@@ -134,6 +89,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
     }
 
     private addManualSaveStateButtons(windowReference: any, gameKey: string, gameName: string): void {
+        if (!this.authService.account()) {
+            return;
+        }
+
         const loadStateButton = windowReference.EJS_emulator?.elements?.bottomBar?.loadState?.[0];
         if (!loadStateButton || document.getElementById('necrowiki-manual-load-state')) {
             return;
@@ -181,7 +140,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
     }
 
     private downloadSaveState(gameKey: string, gameName: string): void {
-        this.saveStateService.load(gameKey).subscribe({
+        const accountId = this.authService.account()?.id;
+        if (!accountId) {
+            return;
+        }
+
+        this.saveStateService.load(accountId, gameKey).subscribe({
             next: state => {
                 const downloadUrl = URL.createObjectURL(
                     new Blob([state], { type: 'application/octet-stream' })
@@ -224,26 +188,29 @@ export class PlayerComponent implements OnInit, OnDestroy {
         windowReference.EJS_disableDatabases = true;
         windowReference.EJS_disableLocalStorage = true;
         const saveKey = `${this.systemId}:${romFilename.toLowerCase()}`;
-        windowReference.EJS_onGameStart = () => this.addManualSaveStateButtons(windowReference, saveKey, gameName);
-        windowReference.EJS_onSaveState = (data: { state: Uint8Array }) => {
-            this.saveStateService.save(saveKey, data.state).subscribe({
-                next: () => this.showEmulatorMessage('Save state armazenado no servidor.'),
-                error: () => this.showEmulatorMessage('Falha ao armazenar o save state.')
-            });
-        };
-        windowReference.EJS_onLoadState = () => {
-            this.saveStateService.load(saveKey).subscribe({
-                next: state => {
-                    windowReference.EJS_emulator?.gameManager?.loadState(new Uint8Array(state));
-                    this.showEmulatorMessage('Save state carregado do servidor.');
-                },
-                error: response => {
-                    this.showEmulatorMessage(response.status === 404
-                        ? 'Nenhum save state encontrado para este jogo.'
-                        : 'Falha ao carregar o save state.');
-                }
-            });
-        };
+        const accountId = this.authService.account()?.id;
+        if (accountId) {
+            windowReference.EJS_onGameStart = () => this.addManualSaveStateButtons(windowReference, saveKey, gameName);
+            windowReference.EJS_onSaveState = (data: { state: Uint8Array }) => {
+                this.saveStateService.save(accountId, saveKey, data.state).subscribe({
+                    next: () => this.showEmulatorMessage('Save state armazenado no servidor.'),
+                    error: () => this.showEmulatorMessage('Falha ao armazenar o save state.')
+                });
+            };
+            windowReference.EJS_onLoadState = () => {
+                this.saveStateService.load(accountId, saveKey).subscribe({
+                    next: state => {
+                        windowReference.EJS_emulator?.gameManager?.loadState(new Uint8Array(state));
+                        this.showEmulatorMessage('Save state carregado do servidor.');
+                    },
+                    error: response => {
+                        this.showEmulatorMessage(response.status === 404
+                            ? 'Nenhum save state encontrado para este jogo.'
+                            : 'Falha ao carregar o save state.');
+                    }
+                });
+            };
+        }
 
         this.emulatorScript = document.createElement('script');
         this.emulatorScript.src = '/emulatorjs/data/loader.js';

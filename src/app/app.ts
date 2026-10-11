@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { HeaderComponent } from './layout/header/header';
 import { FooterComponent } from './layout/footer/footer';
 import { SidebarComponent } from './layout/sidebar/sidebar';
@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 
 import { LoadingService } from './services/loading.service';
+import { SidebarStateService } from './services/sidebar-state.service';
 
 @Component({
     selector: 'app-root',
@@ -25,6 +26,7 @@ import { LoadingService } from './services/loading.service';
 export class App implements OnInit {
 
     readonly loading = signal(false);
+    readonly sidebarState = inject(SidebarStateService);
 
     constructor(
         private readonly loadingService: LoadingService

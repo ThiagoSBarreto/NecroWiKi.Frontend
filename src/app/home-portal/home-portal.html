@@ -1,0 +1,50 @@
+<main class="portal-home">
+    <section class="portal-grid" aria-label="Áreas do portal">
+        @for (item of wikiItems; track item.id) {
+            <article class="portal-card" [attr.data-theme]="item.theme">
+                <header class="portal-card__header">
+                    <div class="portal-card__mark">
+                        <img [ngSrc]="item.image" [alt]="item.title" width="64" height="64" />
+                    </div>
+                    <div class="portal-card__heading">
+                        <p>{{ item.subtitle }}</p>
+                        <h2>{{ item.title }}</h2>
+                    </div>
+                </header>
+
+                <nav class="portal-card__links" [attr.aria-label]="'Opções de ' + item.title">
+                    @for (link of item.links; track link.route) {
+                        @if (link.external) {
+                            <a class="portal-link" [href]="link.route" target="_blank" rel="noopener noreferrer">
+                                @if (link.image) {
+                                    <img [ngSrc]="link.image" [alt]="''" width="24" height="24" />
+                                } @else {
+                                    <i [class]="link.icon ?? 'pi pi-arrow-up-right'" aria-hidden="true"></i>
+                                }
+                                <span>{{ link.label }}</span>
+                                <i class="pi pi-arrow-up-right portal-link__outbound" aria-hidden="true"></i>
+                            </a>
+                        } @else if (link.downloadGameName) {
+                            <a class="portal-link" [href]="downloadService.downloadUrl(link.downloadGameName)"
+                                target="_blank" rel="noopener noreferrer">
+                                <i [class]="link.icon ?? 'pi pi-download'" aria-hidden="true"></i>
+                                <span>{{ link.label }}</span>
+                                <i class="pi pi-arrow-down portal-link__outbound" aria-hidden="true"></i>
+                            </a>
+                        } @else {
+                            <a class="portal-link" [routerLink]="link.route">
+                                @if (link.image) {
+                                    <img [ngSrc]="link.image" [alt]="''" width="24" height="24" />
+                                } @else {
+                                    <i [class]="link.icon ?? 'pi pi-arrow-right'" aria-hidden="true"></i>
+                                }
+                                <span>{{ link.label }}</span>
+                                <i class="pi pi-arrow-right portal-link__outbound" aria-hidden="true"></i>
+                            </a>
+                        }
+                    }
+                </nav>
+            </article>
+        }
+    </section>
+</main>
