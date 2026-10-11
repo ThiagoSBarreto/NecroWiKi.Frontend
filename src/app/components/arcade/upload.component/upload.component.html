@@ -6,7 +6,7 @@
     <ng-template pTemplate="header">
         <div class="upload-dialog__header">
             <div class="upload-dialog__title">
-                <span class="upload-dialog__title-text">Adicionar Jogo</span>
+                <span class="upload-dialog__title-text">{{ game ? 'Editar Jogo' : 'Adicionar Jogo' }}</span>
                 <span class="upload-dialog__system">
                     <img [src]="platformMeta.icon" [alt]="platformMeta.label" />
                     <span>{{ platformMeta.label }}</span>
@@ -18,7 +18,8 @@
     <div class="upload-form-grid">
         <section class="form-section">
             <label class="drop-zone" for="romInput" (drop)="onRomFilesDropped($event)" (dragover)="onRomDragOver($event)">
-                <input id="romInput" type="file" multiple [disabled]="isUploading" (change)="onRomFilesSelected($event)" />
+                <input id="romInput" type="file" [multiple]="!game" [disabled]="isUploading"
+                    (change)="onRomFilesSelected($event)" />
 
                 <span class="drop-zone__content">
                     <span class="drop-zone__icon">
@@ -26,8 +27,8 @@
                     </span>
 
                     <span class="drop-zone__text">
-                        <strong>Arraste a ROM aqui</strong>
-                        <small>ou clique para selecionar arquivos</small>
+                        <strong>{{ game ? 'Substituir arquivo ROM' : 'Arraste a ROM aqui' }}</strong>
+                        <small>{{ game ? 'Opcional: sem arquivo novo, a ROM atual será mantida.' : 'ou clique para selecionar arquivos' }}</small>
                     </span>
                 </span>
             </label>
@@ -52,7 +53,7 @@
                 <ng-template #emptyCover>
                     <span class="cover-placeholder">
                         <i class="pi pi-image"></i>
-                        <small>Selecionar capa</small>
+                        <small>{{ game ? 'Trocar capa' : 'Selecionar capa' }}</small>
                     </span>
                 </ng-template>
             </label>
@@ -92,7 +93,7 @@
                 (onClick)="cancel()">
             </p-button>
 
-            <p-button [label]="isUploading ? 'Enviando...' : 'Confirmar'" icon="pi pi-check"
+            <p-button [label]="isUploading ? (game ? 'Salvando...' : 'Enviando...') : 'Confirmar'" icon="pi pi-check"
                 [disabled]="isUploading" (onClick)="confirm()">
             </p-button>
         </div>

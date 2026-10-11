@@ -5,6 +5,7 @@ import {
     Component,
     EventEmitter,
     Input,
+    OnInit,
     Output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -16,6 +17,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 import { GameSystemService } from '../../../services/gamesystem.service';
 import { ToastService } from '../../../services/toast.service';
+import { ArcadeGameModel } from '../../../models/arcade.models/arcade.game.model';
 
 interface UploadSystemMeta {
     id: string;
@@ -37,8 +39,9 @@ interface UploadSystemMeta {
     styleUrl: './upload.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UploadComponent {
+export class UploadComponent implements OnInit {
     @Input() systemId = 'n64';
+    @Input() game: ArcadeGameModel | null = null;
     @Output() closed = new EventEmitter<boolean>();
 
     dialogVisible = true;
@@ -81,6 +84,13 @@ export class UploadComponent {
     ) {
     }
 
+    ngOnInit(): void {
+        if (this.game) {
+            this.gameName = this.game.name;
+            this.coverPreview = this.game.imagePath || null;
+        }
+    }
+
     get platformMeta(): UploadSystemMeta {
         return this.systemMap[this.systemId] ?? this.systemMap['n64'];
     }
@@ -93,7 +103,7 @@ export class UploadComponent {
             return;
         }
 
-        this.romFiles = files;
+        this.romFiles = this.game ? [files[0]] : files;
 
         if (!this.gameName.trim()) {
             const firstRomName = this.getBaseFileName(files[0].name);
@@ -111,7 +121,7 @@ export class UploadComponent {
             return;
         }
 
-        this.romFiles = files;
+        this.romFiles = this.game ? [files[0]] : files;
 
         if (!this.gameName.trim()) {
             const firstRomName = this.getBaseFileName(files[0].name);
@@ -164,7 +174,7 @@ export class UploadComponent {
             return;
         }
 
-        if (!this.romFiles.length) {
+        if (!this.game && !this.romFiles.length) {
             this.toastService.error('Arquivo obrigatório', 'Selecione ao menos uma ROM para fazer o upload.');
             return;
         }
@@ -175,12 +185,18 @@ export class UploadComponent {
         }
 
         const formData = new FormData();
-        formData.append('system', this.systemId);
         formData.append('name', this.gameName.trim());
 
-        this.romFiles.forEach(file => {
-            formData.append('romFiles', file, file.name);
-        });
+        if (this.game) {
+            if (this.romFiles[0]) {
+                formData.append('romFile', this.romFiles[0], this.romFiles[0].name);
+            }
+        } else {
+            formData.append('system', this.systemId);
+            this.romFiles.forEach(file => {
+                formData.append('romFiles', file, file.name);
+            });
+        }
 
         if (this.coverFile) {
             formData.append('coverFile', this.coverFile, this.coverFile.name);
@@ -191,7 +207,11 @@ export class UploadComponent {
         this.uploadedBytes = 0;
         this.uploadTotalBytes = null;
 
-        this.gameSystemService.uploadGame(this.systemId, formData).subscribe({
+        const request = this.game
+            ? this.gameSystemService.updateGame(this.systemId, this.game.name, formData)
+            : this.gameSystemService.uploadGame(this.systemId, formData);
+
+        request.subscribe({
             next: (event) => {
                 if (event.type === HttpEventType.UploadProgress) {
                     this.uploadedBytes = event.loaded;
@@ -210,7 +230,10 @@ export class UploadComponent {
                 this.isUploading = false;
                 const response = event.body;
                 if (response?.message === 'success') {
-                    this.toastService.success('Sucesso', 'Jogo adicionado com sucesso!');
+                    this.toastService.success(
+                        'Sucesso',
+                        this.game ? 'Jogo atualizado com sucesso!' : 'Jogo adicionado com sucesso!'
+                    );
                     this.closePopup(true);
                     return;
                 }
