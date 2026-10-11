@@ -22,7 +22,7 @@
     border: 1px solid var(--necro-border);
     border-right: 0;
     border-radius: 0.5rem 0 0 0.5rem;
-    background: #101311;
+    background: #111017;
 }
 
 .account-brand {
@@ -110,7 +110,7 @@
     padding: 0.65rem 0.75rem;
     border: 1px solid var(--necro-border-hover);
     border-radius: 0.25rem;
-    background: #090b0a;
+    background: #0b0a10;
     color: var(--necro-text);
     font: inherit;
 }
@@ -179,8 +179,8 @@
     border: 1px solid var(--necro-border);
     border-radius: 0 0.5rem 0.5rem 0;
     background:
-        radial-gradient(ellipse at 75% 25%, rgba(0, 255, 157, 0.16), transparent 42%),
-        linear-gradient(140deg, #11251c, #101a17 42%, #1f1812);
+        radial-gradient(ellipse at 75% 25%, rgba(181, 108, 255, 0.2), transparent 42%),
+        linear-gradient(140deg, #24152f, #15111e 42%, #211913);
 }
 
 .account-art__grid {
@@ -221,12 +221,12 @@
     position: absolute;
     width: 6rem;
     aspect-ratio: 1;
-    border: 1px solid rgba(0, 255, 157, 0.42);
+    border: 1px solid rgba(181, 108, 255, 0.5);
     transform: rotate(45deg);
 }
 
 .account-art__pixel--one { top: 17%; right: 19%; }
-.account-art__pixel--two { top: 31%; right: 35%; width: 2.3rem; background: rgba(0, 255, 157, 0.12); }
+.account-art__pixel--two { top: 31%; right: 35%; width: 2.3rem; background: rgba(181, 108, 255, 0.16); }
 
 @media (max-width: 760px) {
     .account-page {
