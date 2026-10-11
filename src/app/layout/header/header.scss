@@ -29,8 +29,32 @@
     justify-content: flex-end;
     align-items: center;
 
-    gap: 2px;
+    gap: 0.7rem;
 }
+
+.session-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--necro-text-muted);
+    font-size: 0.78rem;
+}
+
+.session-label i { color: var(--necro-primary); }
+
+.session-button {
+    padding: 0.45rem 0.65rem;
+    border: 1px solid var(--necro-border-hover);
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--necro-text);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.75rem;
+    text-decoration: none;
+}
+
+.session-button:hover { border-color: var(--necro-primary); color: var(--necro-primary); }
 
 .header-title {
     color: var(--necro-primary);

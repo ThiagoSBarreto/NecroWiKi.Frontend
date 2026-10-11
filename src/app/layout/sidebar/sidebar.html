@@ -1,5 +1,6 @@
 <aside class="sidebar">
-    <section class="sidebar-section" class="home">
+    @if (!authService.isGuest()) {
+    <section class="sidebar-section home">
         <h3>
             <span>
                 NecroHome
@@ -13,8 +14,9 @@
             </a>
         </h3>
     </section>
+    }
 
-    @for (game of wikiItems; track game.id) {
+    @for (game of visibleWikiItems; track game.id) {
     <section class="sidebar-section" [class]="game.theme">
         <h3>
             <img [src]="game.image" [alt]="game.title" />

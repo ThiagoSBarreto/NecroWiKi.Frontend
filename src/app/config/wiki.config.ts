@@ -193,7 +193,7 @@ export const WIKI_CONFIG: WikiItem[] = [
             },
             {
                 label: 'Tutoriais',
-                route: '/diablo2/tutorials',
+                route: '/tutorials/warcraft3',
                 icon: 'pi pi-book',
                 severity: 'info'
             }
@@ -224,7 +224,7 @@ export const WIKI_CONFIG: WikiItem[] = [
             },
             {
                 label: 'Tutoriais',
-                route: '/diablo2/tutorials',
+                route: '/tutorials/diablo2',
                 icon: 'pi pi-book',
                 severity: 'danger'
             }

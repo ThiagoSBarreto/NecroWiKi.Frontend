@@ -8,6 +8,17 @@
     </div>
 
     <div class="header-right">
-        
+        @if (authService.isGuest()) {
+            <span class="session-label"><i class="pi pi-user" aria-hidden="true"></i> Guest</span>
+            <button type="button" class="session-button" (click)="endSession()">Sair do Guest</button>
+        } @else if (authService.isAuthenticated()) {
+            <span class="session-label"><i class="pi pi-user" aria-hidden="true"></i> {{ authService.account()?.userName }}</span>
+            @if (authService.isAdmin()) {
+                <a class="session-button" routerLink="/admin">Admin</a>
+            }
+            <button type="button" class="session-button" (click)="endSession()">Sair</button>
+        } @else {
+            <a class="session-button" routerLink="/account">Entrar</a>
+        }
     </div>
 </header>

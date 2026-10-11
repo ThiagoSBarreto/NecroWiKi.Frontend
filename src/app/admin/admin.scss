@@ -1,0 +1,92 @@
+:host { display: block; }
+
+.admin-page {
+    width: min(100%, 78rem);
+    margin: 0 auto;
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    color: var(--necro-text);
+}
+
+.admin-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--necro-border);
+}
+
+.admin-eyebrow {
+    margin: 0 0 0.6rem;
+    color: var(--necro-primary);
+    font-family: 'Courier New', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.admin-heading h1 { margin: 0; font-size: 2rem; }
+.admin-heading p:last-child { margin: 0.5rem 0 0; color: var(--necro-text-muted); }
+
+.accounts-summary {
+    display: flex;
+    gap: 1.2rem;
+    padding: 1.1rem 0;
+    color: var(--necro-text-muted);
+    font-size: 0.8rem;
+}
+
+.accounts-table-wrap { overflow-x: auto; border: 1px solid var(--necro-border); border-radius: 0.35rem; }
+
+.accounts-table { width: 100%; min-width: 58rem; border-collapse: collapse; background: var(--necro-surface); }
+.accounts-table th,
+.accounts-table td { padding: 0.8rem 0.9rem; border-bottom: 1px solid var(--necro-border); text-align: left; }
+.accounts-table th { background: var(--necro-surface-2); color: var(--necro-text-muted); font-size: 0.72rem; font-weight: 600; }
+.accounts-table tr:last-child td { border-bottom: 0; }
+.accounts-table td:first-child { display: flex; min-height: 3.5rem; flex-direction: column; justify-content: center; gap: 0.25rem; }
+.accounts-table td:first-child small { color: var(--necro-text-muted); font-size: 0.7rem; }
+
+.accounts-table select,
+.password-reset,
+.create-account-form input,
+.create-account-form select {
+    min-height: 2.35rem;
+    padding: 0.45rem 0.55rem;
+    border: 1px solid var(--necro-border-hover);
+    border-radius: 0.25rem;
+    background: #0a0d0b;
+    color: var(--necro-text);
+    font: inherit;
+    font-size: 0.82rem;
+}
+
+.password-reset { width: 10rem; }
+
+.status-toggle { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--necro-text-muted); font-size: 0.8rem; }
+.status-toggle input { accent-color: var(--necro-primary); }
+
+.account-actions { white-space: nowrap; }
+.icon-action {
+    width: 2.25rem;
+    aspect-ratio: 1;
+    margin-right: 0.3rem;
+    border: 1px solid var(--necro-border);
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--necro-primary);
+    cursor: pointer;
+}
+.icon-action:hover { border-color: var(--necro-primary); }
+.icon-action:disabled { cursor: wait; opacity: 0.5; }
+.icon-action--danger { color: #ff6d66; }
+.icon-action--danger:hover { border-color: #ff6d66; }
+
+.admin-error { margin: 1rem 0; color: #ff8179; font-size: 0.85rem; }
+.admin-state { padding: 4rem 1rem; color: var(--necro-text-muted); text-align: center; }
+
+.create-account-form { display: grid; gap: 1rem; }
+.create-account-form label { display: grid; gap: 0.4rem; color: var(--necro-text); font-size: 0.83rem; font-weight: 700; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 0.65rem; padding-top: 0.5rem; }
+
+@media (max-width: 600px) {
+    .admin-heading { align-items: flex-start; flex-direction: column; }
+}

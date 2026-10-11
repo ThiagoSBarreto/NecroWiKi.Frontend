@@ -9,11 +9,12 @@ import { MessageService } from 'primeng/api';
 
 import { routes } from './app.routes';
 import { loadingInterceptor } from './interceptors/loading.interceptor';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(routes),
-        provideHttpClient(withInterceptors([loadingInterceptor])),
+        provideHttpClient(withInterceptors([authInterceptor, loadingInterceptor])),
         MessageService,
         providePrimeNG({
             theme: {

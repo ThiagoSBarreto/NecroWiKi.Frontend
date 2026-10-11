@@ -1,0 +1,82 @@
+<main class="admin-page">
+    <header class="admin-heading">
+        <div>
+            <p class="admin-eyebrow">NECROWIKI / ADMIN</p>
+            <h1>Contas do portal</h1>
+            <p>Gerencie acesso, níveis e credenciais.</p>
+        </div>
+        <p-button label="Nova conta" icon="pi pi-plus" (onClick)="showCreateDialog = true"></p-button>
+    </header>
+
+    @if (errorMessage()) {
+        <p class="admin-error" role="alert">{{ errorMessage() }}</p>
+    }
+
+    @if (loading()) {
+        <div class="admin-state" role="status">Carregando contas...</div>
+    } @else {
+        <div class="accounts-summary">
+            <span>{{ accounts().length }} contas</span>
+            <span>{{ accounts().filter(account => account.isActive).length }} ativas</span>
+        </div>
+
+        <div class="accounts-table-wrap">
+            <table class="accounts-table">
+                <thead>
+                    <tr><th>Usuário</th><th>Nível</th><th>Estado</th><th>Nova senha</th><th>Ações</th></tr>
+                </thead>
+                <tbody>
+                    @for (account of accounts(); track account.id) {
+                        <tr>
+                            <td>
+                                <strong>{{ account.userName }}</strong>
+                                <small>Criada em {{ account.createdAtUtc | date: 'mediumDate' }}</small>
+                            </td>
+                            <td>
+                                <select [(ngModel)]="account.role" [name]="'role-' + account.id">
+                                    <option value="User">User</option>
+                                    <option value="Admin">Admin</option>
+                                </select>
+                            </td>
+                            <td>
+                                <label class="status-toggle">
+                                    <input type="checkbox" [(ngModel)]="account.isActive" [name]="'active-' + account.id" />
+                                    <span>{{ account.isActive ? 'Ativa' : 'Suspensa' }}</span>
+                                </label>
+                            </td>
+                            <td>
+                                <input class="password-reset" type="password" [(ngModel)]="account.newPassword"
+                                    [name]="'password-' + account.id" autocomplete="new-password"
+                                    placeholder="Manter atual" minlength="10" />
+                            </td>
+                            <td class="account-actions">
+                                <button type="button" class="icon-action" [disabled]="busyId() === account.id"
+                                    title="Salvar alterações" aria-label="Salvar alterações de {{ account.userName }}"
+                                    (click)="saveAccount(account)"><i class="pi pi-save"></i></button>
+                                <button type="button" class="icon-action icon-action--danger" [disabled]="busyId() === account.id"
+                                    title="Excluir conta" aria-label="Excluir {{ account.userName }}"
+                                    (click)="deleteAccount(account)"><i class="pi pi-trash"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</main>
+
+<p-dialog header="Criar conta" [(visible)]="showCreateDialog" [modal]="true" [draggable]="false"
+    [resizable]="false" [style]="{ width: 'min(440px, 94vw)' }" styleClass="account-dialog"
+    (onHide)="resetCreateForm()">
+    <form class="create-account-form" (ngSubmit)="createAccount()">
+        <label><span>Usuário</span><input name="username" [(ngModel)]="newUserName" minlength="3" maxlength="32" required /></label>
+        <label><span>Senha inicial</span><input name="password" type="password" [(ngModel)]="newPassword"
+            minlength="10" maxlength="128" autocomplete="new-password" required /></label>
+        <label><span>Nível</span><select name="role" [(ngModel)]="newRole"><option value="User">User</option><option value="Admin">Admin</option></select></label>
+        @if (createError()) { <p class="admin-error" role="alert">{{ createError() }}</p> }
+        <div class="dialog-actions">
+            <p-button label="Cancelar" severity="secondary" [outlined]="true" type="button" (onClick)="closeCreateDialog()"></p-button>
+            <p-button label="Criar conta" icon="pi pi-plus" type="submit"></p-button>
+        </div>
+    </form>
+</p-dialog>
