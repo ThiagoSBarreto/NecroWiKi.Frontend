@@ -2,14 +2,8 @@
     <section class="account-panel" aria-labelledby="account-title">
         <a class="account-brand" routerLink="/account" aria-label="NecroWiKi">
             <span class="account-brand__mark">N</span>
-            <span>NECROWIKI</span>
+            <span>NecroWiKi</span>
         </a>
-
-        <p class="account-eyebrow">PORTAL DE JOGOS</p>
-        <h1 id="account-title">{{ registering() ? 'Crie sua conta' : 'Entre no portal' }}</h1>
-        <p class="account-copy">
-            {{ registering() ? 'Sua conta reúne acesso aos tutoriais e aos seus saves.' : 'Acesse seus tutoriais e continue seus jogos.' }}
-        </p>
 
         <div class="account-tabs" role="tablist" aria-label="Acesso à conta">
             <button type="button" role="tab" [attr.aria-selected]="!registering()"
@@ -44,24 +38,15 @@
                 <p class="account-error" role="alert">{{ errorMessage() }}</p>
             }
 
-            <p-button [label]="busy() ? 'Aguarde...' : registering() ? 'Criar conta User' : 'Entrar'"
+            <p-button [label]="busy() ? 'Aguarde...' : registering() ? 'Registrar' : 'Entrar'"
                 icon="pi pi-arrow-right" iconPos="right" type="submit" [disabled]="busy()"></p-button>
         </form>
-
-        <div class="account-divider"><span>ou</span></div>
-        <button class="guest-button" type="button" (click)="enterAsGuest()">
-            <i class="pi pi-play" aria-hidden="true"></i>
-            <span>Continuar como Guest</span>
-        </button>
-        <p class="guest-note">Guest pode jogar no arcade; progresso não é salvo.</p>
     </section>
 
     <aside class="account-art" aria-hidden="true">
         <div class="account-art__grid"></div>
         <div class="account-art__copy">
-            <span>EST. 1996</span>
-            <strong>Continue<br />sua aventura.</strong>
-            <i>NECRO ARCADE / PORTAL</i>
+            <i>NecroWiKi</i>
         </div>
         <div class="account-art__pixel account-art__pixel--one"></div>
         <div class="account-art__pixel account-art__pixel--two"></div>
