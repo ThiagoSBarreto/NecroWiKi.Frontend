@@ -130,14 +130,14 @@ export const WIKI_CONFIG: WikiItem[] = [
                 severity: 'warn'
             },
             {
-                label: 'Download WotLK 3.5.5a',
+                label: 'WotLK 3.5.5a',
                 route: '/download/wow-wotlk',
                 icon: 'pi pi-download',
                 severity: 'warn',
                 downloadGameName: 'World_of_Warcraft_3.5.5_WotLK'
             },
             {
-                label: 'Download TBC 2.4.3',
+                label: 'TBC 2.4.3',
                 route: '/download/wow-tbc',
                 icon: 'pi pi-download',
                 severity: 'warn',
@@ -197,14 +197,14 @@ export const WIKI_CONFIG: WikiItem[] = [
 
         links: [
             {
-                label: 'Download Original',
+                label: 'Original',
                 route: '/diablo2/d2-original',
                 icon: 'pi pi-download',
                 severity: 'danger',
                 downloadGameName: 'Diablo_II'
             },
             {
-                label: 'Download PlugY',
+                label: 'PlugY',
                 route: '/dialbo2/d2-plugy',
                 icon: 'pi pi-download',
                 severity: 'danger',
