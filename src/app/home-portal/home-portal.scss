@@ -1,14 +1,14 @@
 :host { display: block; }
 
 .portal-home {
-    width: min(100%, 88rem);
+    width: min(100%, 96rem);
     margin: 0 auto;
     padding: clamp(1rem, 2.6vw, 2.25rem);
 }
 
 .portal-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
     align-items: stretch;
     gap: clamp(0.75rem, 1.4vw, 1.1rem);
 }
@@ -164,13 +164,7 @@
 .portal-link span {
     min-width: 0;
     flex: 1 1 auto;
-    overflow-wrap: anywhere;
-}
-
-.portal-link__outbound {
-    flex: 0 0 auto;
-    color: var(--necro-text-muted);
-    font-size: 0.7rem;
+    white-space: nowrap;
 }
 
 @media (max-width: 560px) {
