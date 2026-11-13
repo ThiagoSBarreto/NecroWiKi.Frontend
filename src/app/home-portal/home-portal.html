@@ -25,7 +25,7 @@
                             </a>
                         } @else if (link.downloadGameName) {
                             <a class="portal-link" [href]="downloadService.downloadUrl(link.downloadGameName)"
-                                target="_blank" rel="noopener noreferrer">
+                                (click)="downloadService.downloadGame(link.downloadGameName); $event.preventDefault()">
                                 <i [class]="link.icon ?? 'pi pi-download'" aria-hidden="true"></i>
                                 <span>{{ link.label }}</span>
                             </a>

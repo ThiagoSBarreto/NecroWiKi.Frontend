@@ -43,7 +43,7 @@
         } @else if (link.downloadGameName) {
 
         <a class="sidebar-link" [href]="downloadService.downloadUrl(link.downloadGameName)"
-            target="_blank" rel="noopener noreferrer">
+            (click)="downloadService.downloadGame(link.downloadGameName); $event.preventDefault()">
 
             @if (link.image) {
             <img [src]="link.image" [alt]="link.label" />
