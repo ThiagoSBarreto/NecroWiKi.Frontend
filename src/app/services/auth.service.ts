@@ -8,7 +8,7 @@ import { PortalAccount, PortalSession } from '../models/portal-account.model';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     private readonly http = inject(HttpClient);
-    private readonly sessionStorageKey = 'necrowiki.portalSession';
+    private readonly sessionKey = 'necrowiki.portalSession';
     private readonly guestStorageKey = 'necrowiki.guest';
 
     readonly account = signal<PortalAccount | null>(null);
@@ -44,6 +44,103 @@ export class AuthService {
     logout(): void {
         this.clearSession();
         this.isGuest.set(false);
+        this.clearGuestSession();
+    }
+
+    private acceptSession(session: PortalSession): void {
+        this.account.set(session.account);
+        this.token.set(session.token);
+        this.isGuest.set(false);
+        this.persistSession(JSON.stringify(session));
+        this.clearLegacySession();
+        this.clearGuestSession();
+    }
+
+    private restoreSession(): void {
+        const serializedSession = this.getStoredSession();
+        if (!serializedSession) {
+            this.isGuest.set(this.hasGuestSession());
+            return;
+        }
+
+        let session: PortalSession;
+        try {
+            session = JSON.parse(serializedSession) as PortalSession;
+        } catch {
+            this.clearSession();
+            this.isGuest.set(this.hasGuestSession());
+            return;
+        }
+
+        if (Date.parse(session.expiresAtUtc) <= Date.now()) {
+            this.clearSession();
+            this.isGuest.set(this.hasGuestSession());
+            return;
+        }
+
+        this.account.set(session.account);
+        this.token.set(session.token);
+        if (this.persistSession(serializedSession)) {
+            this.clearLegacySession();
+        }
+    }
+
+    private clearSession(): void {
+        this.account.set(null);
+        this.token.set(null);
+        this.clearStoredSession();
+    }
+
+    private getStoredSession(): string | null {
+        try {
+            const persistedSession = localStorage.getItem(this.sessionKey);
+            if (persistedSession) {
+                return persistedSession;
+            }
+        } catch {
+            // Fall back to the legacy session storage value.
+        }
+
+        try {
+            return sessionStorage.getItem(this.sessionKey);
+        } catch {
+            return null;
+        }
+    }
+
+    private persistSession(serializedSession: string): boolean {
+        try {
+            localStorage.setItem(this.sessionKey, serializedSession);
+            return true;
+        } catch {
+            // Keep the authenticated session in memory when storage is unavailable.
+            return false;
+        }
+    }
+
+    private clearStoredSession(): void {
+        try {
+            localStorage.removeItem(this.sessionKey);
+        } catch {
+            // Storage may be unavailable in restricted browser contexts.
+        }
+
+        try {
+            sessionStorage.removeItem(this.sessionKey);
+        } catch {
+            // Storage may be unavailable in restricted browser contexts.
+        }
+    }
+
+    private clearLegacySession(): void {
+        try {
+            sessionStorage.removeItem(this.sessionKey);
+        } catch {
+            // Storage may be unavailable in restricted browser contexts.
+        }
+    }
+
+    private clearGuestSession(): void {
         try {
             sessionStorage.removeItem(this.guestStorageKey);
         } catch {
@@ -51,45 +148,11 @@ export class AuthService {
         }
     }
 
-    private acceptSession(session: PortalSession): void {
-        this.account.set(session.account);
-        this.token.set(session.token);
-        this.isGuest.set(false);
+    private hasGuestSession(): boolean {
         try {
-            sessionStorage.setItem(this.sessionStorageKey, JSON.stringify(session));
-            sessionStorage.removeItem(this.guestStorageKey);
+            return sessionStorage.getItem(this.guestStorageKey) === 'true';
         } catch {
-            // Keep the authenticated session in memory when storage is unavailable.
-        }
-    }
-
-    private restoreSession(): void {
-        try {
-            const serializedSession = sessionStorage.getItem(this.sessionStorageKey);
-            if (serializedSession) {
-                const session = JSON.parse(serializedSession) as PortalSession;
-                if (Date.parse(session.expiresAtUtc) > Date.now()) {
-                    this.account.set(session.account);
-                    this.token.set(session.token);
-                    return;
-                }
-
-                sessionStorage.removeItem(this.sessionStorageKey);
-            }
-
-            this.isGuest.set(sessionStorage.getItem(this.guestStorageKey) === 'true');
-        } catch {
-            this.logout();
-        }
-    }
-
-    private clearSession(): void {
-        this.account.set(null);
-        this.token.set(null);
-        try {
-            sessionStorage.removeItem(this.sessionStorageKey);
-        } catch {
-            // In-memory session is still cleared.
+            return false;
         }
     }
 }
